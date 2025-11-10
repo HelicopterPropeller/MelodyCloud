@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="278dp"
+    android:layout_height="61dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <ImageView
+        android:id="@+id/song_cover"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/background_rounded"
+        android:src="@drawable/example_inner_item_song"
+        android:clipToOutline="true"
+        />
+
+    <TextView
+        android:id="@+id/song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginStart="12dp"
+        android:includeFontPadding="false"
+        android:text="The Great Gig in the Sky"
+        android:textColor="#0E1320"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toTopOf="@id/song_message"
+        app:layout_constraintEnd_toStartOf="@+id/song_play"
+        app:layout_constraintStart_toEndOf="@id/song_cover"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.0"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/song_message"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/song_play"
+        app:layout_constraintStart_toStartOf="@id/song_name"
+        app:layout_constraintTop_toBottomOf="@id/song_name"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <ImageView
+            android:id="@+id/song_user_like"
+            android:layout_width="9dp"
+            android:layout_height="9dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/recommend_heart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/song_sign"
+            android:layout_width="16dp"
+            android:layout_height="11dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            app:layout_goneMarginStart="0dp"
+            android:background="@drawable/background_red_rounded"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:padding="2dp"
+            android:text="VIP"
+            android:textColor="@color/netease_red"
+            android:textSize="6sp"
+            app:layout_constraintStart_toEndOf="@id/song_user_like"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/song_author"
+            android:layout_width="wrap_content"
+            android:layout_height="13dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            app:layout_goneMarginStart="0dp"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:text="Pink Floyd"
+            android:textColor="#7D8789"
+            android:textSize="11dp"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/song_sign"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <ImageView
+        android:id="@+id/song_play"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/recommend_play"
+        app:tint="#545569"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

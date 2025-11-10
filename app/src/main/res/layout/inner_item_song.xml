@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/song_1"
+        layout="@layout/inner_item_power_song"
+        />
+
+    <include
+        android:id="@+id/song_2"
+        layout="@layout/inner_item_power_song"
+        />
+
+    <include
+        android:id="@+id/song_3"
+        layout="@layout/inner_item_power_song"
+        />
+
+</LinearLayout>

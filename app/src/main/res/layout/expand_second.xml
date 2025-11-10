@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="270dp">
+
+    <LinearLayout
+        android:id="@+id/rhythm_and_blues"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_rhythm_and_blues"
+            />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:text="R&amp;B"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginStart="2dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rap"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rhythm_and_blues"
+        app:layout_constraintEnd_toStartOf="@id/light_music"
+        android:layout_marginTop="5dp"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_rap"
+            />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:text="说唱"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginStart="2dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/light_music"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/global"
+        app:layout_constraintStart_toEndOf="@id/rap"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_light_music" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="轻音乐"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/global"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_global"
+            />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:text="全球"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginStart="2dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/driving"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rhythm_and_blues">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_driving"
+            android:padding="1dp"/>
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="驾车"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/jazz"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toStartOf="@id/relax"
+        app:layout_constraintStart_toEndOf="@id/driving"
+        app:layout_constraintTop_toBottomOf="@id/rhythm_and_blues">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_jazz" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="爵士"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/relax"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toStartOf="@+id/acgn"
+        app:layout_constraintStart_toEndOf="@id/jazz"
+        app:layout_constraintTop_toBottomOf="@id/rhythm_and_blues">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_relax" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="放松"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/acgn"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rhythm_and_blues">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_acgn" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="二次元"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sleep_aid"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/driving">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_sleep_aid" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="助眠"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/electronic"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@id/sleep_aid"
+        app:layout_constraintEnd_toStartOf="@id/french"
+        app:layout_constraintTop_toBottomOf="@id/driving">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_electronic"
+            android:padding="1dp"/>
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="电音"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/french"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toStartOf="@+id/ballad"
+        app:layout_constraintStart_toEndOf="@id/electronic"
+        app:layout_constraintTop_toBottomOf="@id/driving">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_french" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:maxLines="1"
+            android:text="法语"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ballad"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/driving">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_balled" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="民谣"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/latin"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sleep_aid">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_latin" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="拉丁"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cantonese"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@id/latin"
+        app:layout_constraintEnd_toStartOf="@id/chinese_style"
+        app:layout_constraintTop_toBottomOf="@id/sleep_aid">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_cantonese" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="粤语"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chinese_style"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toStartOf="@+id/japanese"
+        app:layout_constraintStart_toEndOf="@id/cantonese"
+        app:layout_constraintTop_toBottomOf="@id/sleep_aid">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_chinese_style" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:maxLines="1"
+            android:text="国风"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/japanese"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sleep_aid">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_japanese"
+            android:padding="1.5dp"/>
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="日语"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nursery_rhymes"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/latin">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_nursery_rhymes" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="儿歌"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dance"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@id/nursery_rhymes"
+        app:layout_constraintEnd_toStartOf="@id/kpop"
+        app:layout_constraintTop_toBottomOf="@id/latin">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_dance" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="舞蹈"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/kpop"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toStartOf="@+id/game"
+        app:layout_constraintStart_toEndOf="@id/dance"
+        app:layout_constraintTop_toBottomOf="@id/latin">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_kpop" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:maxLines="1"
+            android:text="K-Pop"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/game"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/latin">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_game" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="游戏"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/slow_rock"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nursery_rhymes">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_slow_rock" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="慢摇DJ"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pioneer"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toEndOf="@id/slow_rock"
+        app:layout_constraintEnd_toStartOf="@id/ai"
+        app:layout_constraintTop_toBottomOf="@id/nursery_rhymes">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_pioneer" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="实验"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ai"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/more"
+        app:layout_constraintStart_toEndOf="@id/pioneer"
+        app:layout_constraintTop_toBottomOf="@id/nursery_rhymes">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/expand_ai" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:maxLines="1"
+            android:text="AI"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/more"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="@color/content"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nursery_rhymes">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="全部分类"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

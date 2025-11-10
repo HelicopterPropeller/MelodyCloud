@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="112dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_curved_rounded"
+    android:backgroundTint="#5B494A">
+
+    <TextView
+        android:id="@+id/vip_level"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="15dp"
+        android:text="黑胶VIP·伍"
+        android:textSize="15sp"
+        android:textColor="#FFD1CB"
+        />
+    
+    <View
+        android:layout_width="40dp"
+        android:layout_height="5dp"
+        app:layout_constraintStart_toEndOf="@id/vip_level"
+        app:layout_constraintTop_toTopOf="@id/vip_level"
+        app:layout_constraintBottom_toBottomOf="@id/vip_level"
+        android:layout_marginStart="6dp"
+        android:background="#F1D6D3"
+        />
+
+    <TextView
+        android:id="@+id/vip_growth_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/vip_level"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:text="你有6成长值待领取 >"
+        android:textSize="11.5sp"
+        android:textColor="#BFA6A8"
+        android:includeFontPadding="true"
+        />
+
+    <TextView
+        android:layout_width="61dp"
+        android:layout_height="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="15dp"
+        android:text="会员中心"
+        android:textSize="10.5sp"
+        android:textColor="#FFD1CB"
+        android:gravity="center"
+        android:includeFontPadding="true"
+        android:background="@drawable/background_rosette_capsule"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        app:layout_constraintTop_toBottomOf="@id/vip_growth_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="#625051"/>
+
+    <TextView
+        android:id="@+id/vip_sell"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="14dp"
+        android:layout_marginStart="15dp"
+        android:text="学生特惠SVIP 8元/月"
+        android:textSize="11.5sp"
+        android:textColor="#BFA6A8"
+        android:includeFontPadding="false"
+        />
+    
+    <ImageView
+        android:id="@+id/vip_sell_image"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/vip_sell"
+        app:layout_constraintBottom_toBottomOf="@id/vip_sell"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/side_navigation_vip"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="40dp"
+    android:layout_height="18dp"
+    android:orientation="horizontal"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="近期"
+        android:textSize="12dp"
+        android:textColor="#7E8386"
+        />
+
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="13"
+        android:textSize="6sp"
+        android:textColor="#7E8386"
+        android:drawableLeft="@drawable/mine_lock"
+        />
+
+</LinearLayout>

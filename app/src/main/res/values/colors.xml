@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background">#F2F7FA</color>
+    <color name="content">#FFFFFF</color>
+    <color name="search_frame_background">#E8E9ED</color>
+    <color name="tab_layout_current">#0D0F1D</color>
+    <color name="tab_layout">#7E8386</color>
+    <color name="common_text_color">#FEFEFE</color>
+    <color name="netease_red">#FF004F</color>
+</resources>
