@@ -12,7 +12,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,7 +61,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnOpenDrawerListener {
 
     private SingletonUser singleInstance;
     private User self;
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigation;
+    private ViewGroup sideNavigationContentContainer;
     private View mask;
     private ImageView playOrPause;
     private ImageView cover;
@@ -115,9 +120,59 @@ public class MainActivity extends AppCompatActivity {
         checkSongsPermission();
     }
 
+    public void openDrawer() {
+        if (drawerLayout != null && !drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+
     private void bindView() {
         drawerLayout = findViewById(R.id.drawer_layout);
         bottomNavigation = findViewById(R.id.bottom_navigation);
+
+        ViewGroup menuView = (ViewGroup) bottomNavigation.getChildAt(0);
+        for (int i = 0; i < menuView.getChildCount(); i++) {
+            View item = menuView.getChildAt(i);
+            item.setOnLongClickListener(v -> true);
+        } // 在这里要加入点击触发下拉刷新的逻辑
+
+        sideNavigationContentContainer = findViewById(R.id.content_container);
+
+        List<View> sideNavigationItems = new ArrayList<>();
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.message));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.shell));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.dressing_center));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.creator_center));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.recently_played));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.scheduled_playback));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.mall));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.ticket_office));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.recommend_songs));
+        sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.customer_service));
+
+        for (View item : sideNavigationItems) {
+            item.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        ObjectAnimator down =  ObjectAnimator.ofFloat(v, "alpha", v.getAlpha(), 0.5f);
+                        down.setDuration(50);
+                        down.setInterpolator(new AccelerateInterpolator());
+                        down.start();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        ObjectAnimator up =  ObjectAnimator.ofFloat(v, "alpha", v.getAlpha(), 1f);
+                        up.setDuration(50);
+                        up.setInterpolator(new DecelerateInterpolator());
+                        up.start();
+                        break;
+                }
+                return v.performClick();
+            });
+
+            item.setOnClickListener(v -> {});
+        }
+
         mask = findViewById(R.id.mask);
 
         playOrPause = findViewById(R.id.player_window_play_or_pause);

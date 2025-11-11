@@ -99,7 +99,7 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
 
         public RecommendHolder(@NonNull View itemView) {
             super(itemView);
-            introduce = itemView.findViewById(R.id.username);
+            introduce = itemView.findViewById(R.id.side_navigation_username);
             expand = itemView.findViewById(R.id.expand);
             content = itemView.findViewById(R.id.content);
         }

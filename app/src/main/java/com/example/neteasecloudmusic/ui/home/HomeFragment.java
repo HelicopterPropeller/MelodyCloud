@@ -1,5 +1,6 @@
 package com.example.neteasecloudmusic.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.neteasecloudmusic.R;
@@ -85,9 +87,15 @@ public class HomeFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     TextView searchFrameContent;
+    ImageView menu;
 
     List<String> prompts;
     Runnable runnable;
+
+    public interface OnOpenDrawerListener {
+        void openDrawer();
+    }
+    private OnOpenDrawerListener mListener;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -172,6 +180,24 @@ public class HomeFragment extends Fragment {
                 }
             };
             handler.post(runnable);
+        }
+
+        menu = view.findViewById(R.id.menu);
+        menu.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.openDrawer();
+            }
+        });
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnOpenDrawerListener) {
+            mListener = (OnOpenDrawerListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnOpenDrawerListener");
         }
     }
 }

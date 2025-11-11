@@ -29,14 +29,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <include
-            android:id="@+id/title"
+            android:id="@+id/mine_title"
             layout="@layout/mine_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/avatar"
+            android:id="@+id/mine_avatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginTop="16dp"
@@ -45,7 +45,7 @@
             android:src="@drawable/example_user_avatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+            app:layout_constraintTop_toBottomOf="@id/mine_title" />
 
         <LinearLayout
             android:id="@+id/information"
@@ -56,7 +56,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/avatar">
+            app:layout_constraintTop_toBottomOf="@id/mine_avatar">
 
             <TextView
                 android:id="@+id/name"

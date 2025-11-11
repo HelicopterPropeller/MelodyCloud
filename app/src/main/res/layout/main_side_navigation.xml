@@ -8,14 +8,14 @@
     android:fitsSystemWindows="true">
 
     <include
-        android:id="@+id/title"
+        android:id="@+id/side_navigation_title"
         layout="@layout/side_navigation_title"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/side_navigation_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/setting"
@@ -56,7 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="28dp"
                     android:text="双人空间"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:includeFontPadding="true"
