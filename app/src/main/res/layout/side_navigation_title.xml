@@ -9,7 +9,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="15dp"
-        android:src="@drawable/example_user_avatar"
+        android:src="@drawable/user_avatar"
         android:background="@drawable/background_circle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

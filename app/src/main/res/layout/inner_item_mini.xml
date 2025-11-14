@@ -9,9 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_rounded"
-        android:src="@drawable/example_inner_item_mini"
+        android:backgroundTint="@color/content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="centerCrop"
         android:clipToOutline="true"
         />
     
@@ -25,11 +26,16 @@
         android:text="OK Computer"
         android:textColor="@color/common_text_color"
         android:textSize="11dp"
-        android:paddingTop="3dp"
-        android:paddingStart="5dp"
+        android:fontFamily="sans-serif-black"
+        android:paddingTop="5dp"
+        android:paddingStart="6dp"
         android:paddingEnd="5dp"
         android:maxLines="2"
         android:ellipsize="end"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
         />
 
     <TextView
@@ -38,8 +44,8 @@
         android:layout_height="14dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="7dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/background_capsule"
         android:backgroundTint="#601E1E1E"
         android:text="歌单"
@@ -47,6 +53,10 @@
         android:textColor="@color/common_text_color"
         android:gravity="center"
         android:includeFontPadding="false"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

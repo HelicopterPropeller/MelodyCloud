@@ -26,7 +26,8 @@
         app:layout_constraintTop_toTopOf="@id/vip_level"
         app:layout_constraintBottom_toBottomOf="@id/vip_level"
         android:layout_marginStart="6dp"
-        android:background="#F1D6D3"
+        android:background="@drawable/background_capsule"
+        android:backgroundTint="#F1D6D3"
         />
 
     <TextView

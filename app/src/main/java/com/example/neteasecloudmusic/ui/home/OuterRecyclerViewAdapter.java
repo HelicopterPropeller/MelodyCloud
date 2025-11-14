@@ -3,6 +3,7 @@ package com.example.neteasecloudmusic.ui.home;
 import static com.example.neteasecloudmusic.data.model.Recommend.*;
 
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,7 +115,7 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
                 content.setLayoutManager(lm);
                 content.setHasFixedSize(true);
 
-                InnerRecyclerViewAdapter adapter = new InnerRecyclerViewAdapter(new ArrayList<>(), recommend.getInnerTypes().get(position));
+                InnerRecyclerViewAdapter adapter = new InnerRecyclerViewAdapter(new ArrayList<>(), recommend.getInnerTypes());
                 content.setAdapter(adapter);
             }
 
@@ -135,12 +136,16 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
                 expand.setVisibility(View.VISIBLE);
             }
 
-            if (recommend.getOuterType() == RECOMMEND_TYPE_SONGS) {
+            if (recommend.getOuterType() == RECOMMEND_TYPE_SONGS && content.getOnFlingListener() == null) {
                 PagerSnapHelper snapHelper = new PagerSnapHelper(); // 吸附
                 snapHelper.attachToRecyclerView(content);
-                content.addItemDecoration(new HorizontalItemDecoration(54, 54));
+                if (content.getItemDecorationCount() == 0) {
+                    content.addItemDecoration(new HorizontalItemDecoration(54, 54, Utils.dpToPx(itemView.getContext(), 15)));
+                }
             } else {
-                content.addItemDecoration(new HorizontalItemDecoration(54, 33));
+                if (content.getItemDecorationCount() == 0) {
+                    content.addItemDecoration(new HorizontalItemDecoration(54, 33, 0));
+                }
             }
         }
     }
@@ -196,23 +201,20 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
                 ExpandRecyclerViewAdapter adapter = new ExpandRecyclerViewAdapter();
                 content.setAdapter(adapter);
 
-                PagerSnapHelper snapHelper = new PagerSnapHelper();
-                snapHelper.attachToRecyclerView(content);
+                if (content.getOnFlingListener() == null) {
+                    PagerSnapHelper snapHelper = new PagerSnapHelper();
+                    snapHelper.attachToRecyclerView(content);
+                }
 
                 content.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     private int width = 0;
-                    private int diff;
-                    private int ini, tar;
+                    private int ini = Utils.dpToPx(itemView.getContext(), 90);
+                    private int tar = Utils.dpToPx(itemView.getContext(), 270);
+                    private int diff = tar - ini;
 
                     @Override
                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
-
-                        if (ini == 0 || tar == 0) {
-                            ini = Utils.dpToPx(itemView.getContext(), 90);
-                            tar = Utils.dpToPx(itemView.getContext(), 270);
-                            diff = tar - ini;
-                        }
 
                         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -263,7 +265,7 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
                         if (params.height == currentHeight) return;
                         params.height = currentHeight;
                         itemView.setLayoutParams(params);
-                        itemView.invalidate();
+                        itemView.requestLayout();
                     }
 
                     private void setFinalHeight(int targetPosition) {
@@ -272,10 +274,10 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
                         if (params.height != targetHeight) {
                             params.height = targetHeight;
                             itemView.setLayoutParams(params);
-                            itemView.requestLayout();
-                            if (itemView.getParent() != null) {
-                                itemView.getParent().requestLayout();
-                            }
+//                            itemView.requestLayout();
+//                            if (itemView.getParent() != null) {
+//                                itemView.getParent().requestLayout();
+//                            }
                         }
                     }
                 });
@@ -311,10 +313,12 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
     public static class HorizontalItemDecoration extends RecyclerView.ItemDecoration {
         private final int margin;
         private final int space;
+        private final int endExtra;
 
-        public HorizontalItemDecoration(int margin, int space) { // px
+        public HorizontalItemDecoration(int margin, int space, int endExtra) { // px
             this.margin = margin;
             this.space = space;
+            this.endExtra = endExtra;
         }
 
         @Override
@@ -324,7 +328,7 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
                 outRect.left = margin;
             } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
                 outRect.left = space;
-                outRect.right = margin;
+                outRect.right = margin + endExtra;
             } else {
                 outRect.left = space;
             }

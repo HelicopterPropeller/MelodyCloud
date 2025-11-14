@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.neteasecloudmusic.R;
+import com.example.neteasecloudmusic.data.model.Recommend;
 import com.example.neteasecloudmusic.ui.widget.OuterRecyclerView;
 
 import java.util.ArrayList;
@@ -79,7 +81,7 @@ public class HomeMusicFragment extends Fragment {
         rv = view.findViewById(R.id.outer_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
-        OuterRecyclerViewAdapter adapter = new OuterRecyclerViewAdapter(new ArrayList<>());
+        OuterRecyclerViewAdapter adapter = new OuterRecyclerViewAdapter(Recommend.musicPageDataSimulation());
 
         rv.setAdapter(adapter);
         rv.addItemDecoration(new OuterRecyclerViewAdapter.MusicFixedItemDecoration());
@@ -92,7 +94,7 @@ public class HomeMusicFragment extends Fragment {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
+            getActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
             if (isAdded()) {
                 requireActivity().runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
             }

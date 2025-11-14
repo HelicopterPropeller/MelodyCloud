@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.neteasecloudmusic.R;
+import com.example.neteasecloudmusic.data.model.Recommend;
 import com.example.neteasecloudmusic.ui.playlist.PlaylistFragment;
 import com.example.neteasecloudmusic.ui.widget.OuterRecyclerView;
 
@@ -82,7 +83,7 @@ public class HomeRecommendFragment extends Fragment {
         rv = view.findViewById(R.id.outer_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
-        OuterRecyclerViewAdapter adapter = new OuterRecyclerViewAdapter(new ArrayList<>());
+        OuterRecyclerViewAdapter adapter = new OuterRecyclerViewAdapter(Recommend.recommendsPageDataSimulation());
         adapter.setOnInnerItemClickListener(item -> {
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -105,7 +106,7 @@ public class HomeRecommendFragment extends Fragment {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
+            getActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
             if (isAdded()) {
                 requireActivity().runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
             }

@@ -13,7 +13,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@drawable/background_rounded"
-        android:src="@drawable/example_inner_item_song"
+        android:scaleType="centerCrop"
         android:clipToOutline="true"
         />
 

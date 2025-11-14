@@ -25,7 +25,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="13dp"
-        android:src="@drawable/example_mine_inner_item"
         android:background="@drawable/background_rounded"
         android:clipToOutline="true"
         />

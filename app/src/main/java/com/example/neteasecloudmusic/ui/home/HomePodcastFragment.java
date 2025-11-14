@@ -78,7 +78,6 @@ public class HomePodcastFragment extends Fragment {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
             if (isAdded()) {
                 requireActivity().runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
             }

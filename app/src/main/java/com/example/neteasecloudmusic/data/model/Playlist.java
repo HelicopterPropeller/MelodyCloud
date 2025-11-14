@@ -33,6 +33,39 @@ public class Playlist {
     public Playlist() {
     }
 
+    public Playlist(int coverId) { // Music->Carousel
+        this.coverId = coverId;
+    }
+
+    public Playlist(int coverId, String title, String introduce) { // do not contains times icon.
+        this.coverId = coverId;
+        this.title = title;
+        this.introduce = introduce;
+    }
+
+    public Playlist(int coverId, String title, String introduce, long times) { // contains times icon.
+        this.coverId = coverId;
+        this.title = title;
+        this.introduce = introduce;
+        this.times = times;
+    }
+
+    public Playlist(List<Song> list) { // SONGS
+        this.list = list;
+    }
+
+    public Playlist(int coverId, String title, boolean isAlbum) { // MINI
+        this.coverId = coverId;
+        this.title = title;
+        this.isAlbum = isAlbum;
+    }
+
+    public Playlist(int coverId, String introduce, long times) { // MUSIC
+        this.coverId = coverId;
+        this.introduce = introduce;
+        this.times = times;
+    }
+
     public String getTitle() {
         return title;
     }

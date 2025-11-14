@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment {
             prompts.add("Pink Floyd");
             prompts.add("宁静优雅古典乐");
             prompts.add("安静钢琴曲");
-            prompts.add("！岛屿心情 新歌发布");
+            prompts.add("岛屿心情 新歌发布");
             prompts.add("方大同 你的10月听歌榜首");
         }
 
@@ -196,7 +196,7 @@ public class HomeFragment extends Fragment {
         if (context instanceof OnOpenDrawerListener) {
             mListener = (OnOpenDrawerListener) context;
         } else {
-            throw new RuntimeException(context.toString()
+            throw new RuntimeException(context
                     + " must implement OnOpenDrawerListener");
         }
     }

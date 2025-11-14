@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private final Executor executorPool = Executors.newSingleThreadExecutor();
 
     private DrawerLayout drawerLayout;
+    private ViewGroup drawer;
     private BottomNavigationView bottomNavigation;
     private ViewGroup sideNavigationContentContainer;
     private View mask;
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
 
     private void bindView() {
         drawerLayout = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.side_navigation_container);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         ViewGroup menuView = (ViewGroup) bottomNavigation.getChildAt(0);
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
             item.setOnLongClickListener(v -> true);
         } // 在这里要加入点击触发下拉刷新的逻辑
 
-        sideNavigationContentContainer = findViewById(R.id.content_container);
+        sideNavigationContentContainer = drawer.findViewById(R.id.content_container);
 
         List<View> sideNavigationItems = new ArrayList<>();
         sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.message));
@@ -149,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.ticket_office));
         sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.recommend_songs));
         sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.customer_service));
+        sideNavigationItems.add(drawer.findViewById(R.id.setting_content));
+        sideNavigationItems.add(drawer.findViewById(R.id.more_content));
 
         for (View item : sideNavigationItems) {
             item.setOnTouchListener((v, event) -> {
@@ -422,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                 if (song.getCover() != null) {
                     cover.setImageBitmap(idSongMap.get(id).getCover());
                 } else {
-                    cover.setImageResource(R.drawable.example_user_avatar);
+                    cover.setImageResource(R.drawable.user_avatar);
                 }
                 currentSongInformation.setText(song.getTitle() + " -" + song.getAuthor().getUsername());
             }
@@ -436,10 +440,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         if (nextIndex != C.INDEX_UNSET) {
             MediaItem nextItem = player.getMediaItemAt(nextIndex);
             long id = Long.parseLong(nextItem.mediaId);
-            if (idSongMap.containsKey(id)) {
+            if (idSongMap.containsKey(id) && idSongMap.get(id).getCover() != null) {
                 cover.setImageBitmap(idSongMap.get(id).getCover());
             } else {
-                cover.setImageResource(R.drawable.example_user_avatar);
+                cover.setImageResource(R.drawable.user_avatar);
             }
         }
 

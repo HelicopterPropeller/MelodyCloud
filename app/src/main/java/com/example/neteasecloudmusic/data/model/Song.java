@@ -38,6 +38,14 @@ public class Song {
         this.cover = cover;
     }
 
+    public Song(int coverId, String title, User author, Boolean isLike, Boolean isVip) {
+        this.coverId = coverId;
+        this.title = title;
+        this.author = author;
+        this.isLike = isLike;
+        this.isVip = isVip;
+    } // SONGS
+
     public long getId() {
         return id;
     }
