@@ -2,12 +2,14 @@ package com.example.neteasecloudmusic.ui.home;
 
 import static com.example.neteasecloudmusic.data.model.Recommend.*;
 
+import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,10 +24,12 @@ import com.example.neteasecloudmusic.data.model.Playlist;
 import com.example.neteasecloudmusic.data.model.Recommend;
 import com.example.neteasecloudmusic.ui.widget.DotView;
 import com.example.neteasecloudmusic.ui.widget.InnerRecyclerView;
-import com.example.neteasecloudmusic.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecyclerViewAdapter.Holder> {
 
@@ -139,14 +143,53 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
             if (recommend.getOuterType() == RECOMMEND_TYPE_SONGS && content.getOnFlingListener() == null) {
                 PagerSnapHelper snapHelper = new PagerSnapHelper(); // 吸附
                 snapHelper.attachToRecyclerView(content);
-                if (content.getItemDecorationCount() == 0) {
-                    content.addItemDecoration(new HorizontalItemDecoration(54, 54, Utils.dpToPx(itemView.getContext(), 15)));
-                }
+                if (content.getItemDecorationCount() == 0)
+                    content.addItemDecoration(new ItemSpacingDecoration(
+                            itemView.getContext(), 16, 16, 15, true));
             } else {
-                if (content.getItemDecorationCount() == 0) {
-                    content.addItemDecoration(new HorizontalItemDecoration(54, 33, 0));
-                }
+                if (content.getItemDecorationCount() == 0)
+                    content.addItemDecoration(new ItemSpacingDecoration(
+                            itemView.getContext(), 16, 10, 0, true));
             }
+
+            final Set<Integer> screenArrived = new HashSet<>();
+
+            content.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (lm == null) return;
+
+                    int start = lm.findFirstVisibleItemPosition();
+                    int end = lm.findLastVisibleItemPosition();
+
+                    for (int i = start; i <= end; i++) {
+                        if (i == RecyclerView.NO_POSITION) continue;
+
+                        if (!screenArrived.contains(i)) {
+                            screenArrived.add(i);
+
+                            View item = lm.findViewByPosition(i);
+                            if (item == null) continue;
+
+                            item.setScaleX(0.95f);
+                            item.setScaleY(0.95f);
+                            item.setAlpha(0f);
+
+                            item.animate()
+                                    .alpha(1f)
+                                    .scaleX(1f)
+                                    .scaleY(1f)
+                                    .setDuration(280)
+                                    .setInterpolator(new DecelerateInterpolator(1.4f))
+                                    .start();
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -174,8 +217,33 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
             CarouselAdapter adapter = new CarouselAdapter(banners);
             carousel.setAdapter(adapter);
 
-            int startPosition = Integer.MAX_VALUE / 2 - (Integer.MAX_VALUE / 2 % banners.size());
-            carousel.setCurrentItem(startPosition, false);
+            final int[] currentPosition = {Integer.MAX_VALUE / 2 - (Integer.MAX_VALUE / 2 % banners.size())};
+            carousel.setCurrentItem(currentPosition[0], false);
+
+            Handler handler = new Handler();
+
+            Runnable autoPlay = new Runnable() {
+                @Override
+                public void run() {
+                    carousel.setCurrentItem(++currentPosition[0], true);
+                    handler.postDelayed(this, 3000);
+                }
+            };
+
+            carousel.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                    if(state == ViewPager2.SCROLL_STATE_DRAGGING) {
+                        handler.removeCallbacks(autoPlay);
+                    } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                        handler.removeCallbacks(autoPlay);
+                        handler.postDelayed(autoPlay, 3000);
+                    }
+                }
+            });
+
+            handler.postDelayed(autoPlay, 3000);
         }
     }
 
@@ -208,8 +276,9 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
 
                 content.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     private int width = 0;
-                    private int ini = Utils.dpToPx(itemView.getContext(), 90);
-                    private int tar = Utils.dpToPx(itemView.getContext(), 270);
+                    private float density = content.getContext().getResources().getDisplayMetrics().density;
+                    private int ini = (int)(density * 90 + 0.5f);
+                    private int tar = (int)(density * 270 + 0.5f);
                     private int diff = tar - ini;
 
                     @Override
@@ -310,50 +379,42 @@ public class OuterRecyclerViewAdapter extends RecyclerView.Adapter<OuterRecycler
         }
     }
 
-    public static class HorizontalItemDecoration extends RecyclerView.ItemDecoration {
+    public static class ItemSpacingDecoration extends RecyclerView.ItemDecoration {
+
         private final int margin;
         private final int space;
-        private final int endExtra;
+        private final int extraEnd;
+        private final boolean isHorizontal;
 
-        public HorizontalItemDecoration(int margin, int space, int endExtra) { // px
-            this.margin = margin;
-            this.space = space;
-            this.endExtra = endExtra;
+        public ItemSpacingDecoration(Context context, int margin, int space, int extraEnd, boolean isHorizontal) { // px
+            float density = context.getResources().getDisplayMetrics().density;
+            this.margin = (int)(margin * density + 0.5f);
+            this.space = (int)(space * density + 0.5f);
+            this.extraEnd = (int)(extraEnd * density + 0.5f);
+            this.isHorizontal = isHorizontal;
         }
 
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
                                    @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            if (parent.getChildAdapterPosition(view) == 0) {
-                outRect.left = margin;
-            } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
-                outRect.left = space;
-                outRect.right = margin + endExtra;
+            if (isHorizontal) {
+                if (parent.getChildAdapterPosition(view) == 0) {
+                    outRect.left = margin;
+                } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+                    outRect.left = space;
+                    outRect.right = margin + extraEnd;
+                } else {
+                    outRect.left = space;
+                }
             } else {
-                outRect.left = space;
-            }
-        }
-    }
-
-    public static class VerticalItemDecoration extends RecyclerView.ItemDecoration {
-        private final int margin;
-        private final int space;
-
-        public VerticalItemDecoration(int margin, int space) { // px
-            this.margin = margin;
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
-                                   @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            if (parent.getChildAdapterPosition(view) == 0) {
-                outRect.top = margin;
-            } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
-                outRect.top = space;
-                outRect.bottom = margin;
-            } else {
-                outRect.top = space;
+                if (parent.getChildAdapterPosition(view) == 0) {
+                    outRect.top = margin;
+                } else if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+                    outRect.top = space;
+                    outRect.bottom = margin + extraEnd;
+                } else {
+                    outRect.top = space;
+                }
             }
         }
     }

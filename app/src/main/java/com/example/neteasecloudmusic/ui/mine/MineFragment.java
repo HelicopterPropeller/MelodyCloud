@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.example.neteasecloudmusic.R;
-import com.example.neteasecloudmusic.utils.Utils;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -83,11 +82,12 @@ public class MineFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        float density = view.getContext().getResources().getDisplayMetrics().density;
 
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.child_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            layoutParams.topMargin = Utils.dpToPx(v.getContext(), 321) + Math.abs(systemBars.top - systemBars.bottom);
+            layoutParams.topMargin = (int)(density * 321 + 0.5f) + Math.abs(systemBars.top - systemBars.bottom);
             v.setLayoutParams(layoutParams);
             return insets;
         });

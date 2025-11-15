@@ -13,7 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 public class InnerRecyclerView extends RecyclerView {
 
-    private float startX, startY;
+    private double x0, y0;
     private final int touchSlop;
 
     public InnerRecyclerView(Context context) {
@@ -40,14 +40,14 @@ public class InnerRecyclerView extends RecyclerView {
 
         switch (e.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                startX = e.getX();
-                startY = e.getY();
+                x0 = e.getX();
+                y0 = e.getY();
                 v.requestDisallowInterceptTouchEvent(true);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                float dx = e.getX() - startX;
-                float dy = e.getY() - startY;
+                double dx = e.getX() - x0;
+                double dy = e.getY() - y0;
 
                 if (Math.abs(dx) < touchSlop && Math.abs(dy) < touchSlop) break;
 

@@ -10,6 +10,8 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -51,6 +53,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private ImageView cover;
     private ObjectAnimator rotationAnimator;
     private TextView currentSongInformation;
+    private CircularProgressIndicator circularProgressIndicator;
 
     private ExoPlayer player;
     private DefaultDataSource.Factory dataSourceFactory;
     private ConcatenatingMediaSource concatenatingMediaSource;
     private final Map<Long, Song> idSongMap = new HashMap<>();
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         rotationAnimator.start();
 
         currentSongInformation = findViewById(R.id.textView);
+
+        circularProgressIndicator = findViewById(R.id.circular_progress_indicator);
     }
 
     private void initBottomNavigation() {
@@ -451,6 +458,24 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
             cover.setRotation(0f);
             rotationAnimator.pause();
         }
+
+        Runnable updateProgressAction = new Runnable() {
+            @Override
+            public void run() {
+                long pos = player.getCurrentPosition();
+                long dur = player.getDuration();
+
+                if (circularProgressIndicator != null) {
+                    int max = circularProgressIndicator.getMax();
+                    int progress = (int)(pos * max / dur);
+                    circularProgressIndicator.setProgress(progress, true);
+                }
+
+                handler.postDelayed(this, 16);
+            }
+        };
+
+        handler.post(updateProgressAction);
     }
 
     @Override

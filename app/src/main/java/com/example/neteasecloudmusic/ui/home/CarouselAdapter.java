@@ -1,5 +1,6 @@
 package com.example.neteasecloudmusic.ui.home;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Holder> {
 
-    List<Playlist> list;
+    private final List<Playlist> list;
 
     public CarouselAdapter(List<Playlist> list) {
         this.list = list;

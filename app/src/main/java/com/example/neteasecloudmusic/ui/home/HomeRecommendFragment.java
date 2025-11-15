@@ -96,7 +96,10 @@ public class HomeRecommendFragment extends Fragment {
             transaction.commit();
         });
         rv.setAdapter(adapter);
-        rv.addItemDecoration(new OuterRecyclerViewAdapter.VerticalItemDecoration(48, 112));
+        if (rv.getItemDecorationCount() == 0) {
+            rv.addItemDecoration(new OuterRecyclerViewAdapter.ItemSpacingDecoration(
+                    view.getContext(), 14, 34, 0, false));
+        }
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.netease_red));

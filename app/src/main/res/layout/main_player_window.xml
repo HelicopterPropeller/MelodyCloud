@@ -50,12 +50,28 @@
         android:id="@+id/player_window_play_or_pause"
         android:layout_width="34dp"
         android:layout_height="match_parent"
-        android:padding="10dp"
+        android:padding="13dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:src="@drawable/player_window_play"
         app:layout_constraintEnd_toStartOf="@id/player_window_playlist"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/circular_progress_indicator"
+        android:layout_width="34dp"
+        android:layout_height="wrap_content"
+        app:indicatorSize="22dp"
+        app:trackThickness="1.5dp"
+        app:indicatorColor="@color/black"
+        app:trackColor="#858585"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        app:layout_constraintStart_toStartOf="@id/player_window_play_or_pause"
+        app:layout_constraintEnd_toEndOf="@id/player_window_play_or_pause"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
     <ImageView
         android:id="@+id/player_window_playlist"

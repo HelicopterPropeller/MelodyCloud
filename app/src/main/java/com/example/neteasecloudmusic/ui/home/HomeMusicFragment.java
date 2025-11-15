@@ -84,7 +84,9 @@ public class HomeMusicFragment extends Fragment {
         OuterRecyclerViewAdapter adapter = new OuterRecyclerViewAdapter(Recommend.musicPageDataSimulation());
 
         rv.setAdapter(adapter);
-        rv.addItemDecoration(new OuterRecyclerViewAdapter.MusicFixedItemDecoration());
+        if (rv.getItemDecorationCount() == 0) {
+            rv.addItemDecoration(new OuterRecyclerViewAdapter.MusicFixedItemDecoration());
+        }
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.netease_red));
