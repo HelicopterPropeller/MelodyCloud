@@ -1,5 +1,8 @@
 package com.example.neteasecloudmusic.data.model;
 
+import com.example.neteasecloudmusic.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Playlist {
@@ -63,6 +66,15 @@ public class Playlist {
     public Playlist(int coverId, String introduce, long times) { // MUSIC
         this.coverId = coverId;
         this.introduce = introduce;
+        this.times = times;
+    }
+
+    public Playlist(int coverId, String title, boolean isAlbum, List<Song> list, User creator, long times) { // mine
+        this.coverId = coverId;
+        this.title = title;
+        this.isAlbum = isAlbum;
+        this.list = list;
+        this.creator = creator;
         this.times = times;
     }
 
@@ -136,5 +148,35 @@ public class Playlist {
 
     public void setCollect(boolean collect) {
         isCollect = collect;
+    }
+
+    public static List<Playlist> minePageDataSimulation() {
+        List<Song> list = new ArrayList<>();
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+        list.add(new Song());
+
+        List<Playlist> result = new ArrayList<>();
+        result.add(new Playlist(R.drawable.khalil_1, "我喜欢的音乐", false, list, new User("我先矛顿"), 7940));
+        result.add(new Playlist(R.drawable.khalil_2, "听歌排行", false, list, new User("Propeller"), 7081));
+        result.add(new Playlist(R.drawable.khalil_3, "未来", true, list, new User("方大同"), 1_000_000_000));
+        result.add(new Playlist(R.drawable.khalil_4, "橙月", true, list, new User("方大同"), 1_000_000_000));
+        result.add(new Playlist(R.drawable.khalil_5, "Timeless 可啦思刻", false, list, new User("Propeller"), 1_000_000));
+        result.add(new Playlist(R.drawable.khalil_6, "15", false, list, new User("Propeller"), 1_000_000));
+
+        return result;
     }
 }

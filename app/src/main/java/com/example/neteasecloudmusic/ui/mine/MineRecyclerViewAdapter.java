@@ -1,6 +1,9 @@
 package com.example.neteasecloudmusic.ui.mine;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -51,6 +54,15 @@ public class MineRecyclerViewAdapter extends RecyclerView.Adapter<MineRecyclerVi
         ImageView record;
         ImageView specialIcon;
 
+        final Runnable runnable = () -> {
+            if (itemView.isPressed()) {
+                Animator press = AnimatorInflater.loadAnimator(itemView.getContext(), R.animator.home_item_press);
+                press.setTarget(itemView);
+                press.start();
+            }
+        };
+        Animator recover = AnimatorInflater.loadAnimator(itemView.getContext(), R.animator.home_item_recover);
+
         public Holder(@NonNull View itemView) {
             super(itemView);
             cover = itemView.findViewById(R.id.cover);
@@ -60,6 +72,23 @@ public class MineRecyclerViewAdapter extends RecyclerView.Adapter<MineRecyclerVi
             sideButton = itemView.findViewById(R.id.inner_expand);
             record = itemView.findViewById(R.id.record);
             specialIcon = itemView.findViewById(R.id.special_icon);
+
+            itemView.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        v.postDelayed(runnable, 200);
+                        v.setPressed(true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        v.setPressed(false);
+                        v.removeCallbacks(runnable);
+                        recover.setTarget(v);
+                        recover.start();
+                        break;
+                }
+                return true;
+            });
         }
 
         public void onBind(Playlist playlist) {
@@ -88,7 +117,7 @@ public class MineRecyclerViewAdapter extends RecyclerView.Adapter<MineRecyclerVi
                 specialIcon.setVisibility(View.VISIBLE);
                 specialIcon.setImageResource(R.drawable.recommend_heart);
                 sj = new StringJoiner("·");
-                sj.add(playlist.getList().size() + "首").add(playlist.getCreator().getUsername());
+                sj.add(playlist.getList().size() + "首").add(playlist.getTimes() + "次播放");
                 information.setText(sj.toString());
             } else if (playlist.getTitle().equals("听歌排行")) {
                 specialIcon.setVisibility(View.VISIBLE);

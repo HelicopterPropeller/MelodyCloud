@@ -46,6 +46,9 @@ public class Song {
         this.isVip = isVip;
     } // SONGS
 
+    public Song() {
+    }
+
     public long getId() {
         return id;
     }

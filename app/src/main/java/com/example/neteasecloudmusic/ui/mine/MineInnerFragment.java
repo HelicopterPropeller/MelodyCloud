@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,41 +98,46 @@ public class MineInnerFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.mine_inner_recycler_view);
 
+        Log.d("fuck", self.getUsername());
         initDataSource();
 
         MineRecyclerViewAdapter adapter = new MineRecyclerViewAdapter(list);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
     }
 
     public void initDataSource() {
         if (list == null) {
-            List<Playlist> data = new ArrayList<>();
+            List<Playlist> data = Playlist.minePageDataSimulation();
             switch (mParam2) {
-                case "1":
+                case "0":
                     // 近期要在Playlist加时间字段
+                    Log.d("fuck", "come here 0");
                     break;
-                case "2":
-                    for (int i = 0; i < data.size(); ++i) {
+                case "1":
+                    for (int i = data.size() - 1; i >= 0; --i) {
                         if (data.get(i).isAlbum() || data.get(i).getCreator().getUsername() != self.getUsername()) {
                             data.remove(i);
                         }
                     }
+                    Log.d("fuck", "come here 1");
                     break;
-                case "3":
-                    for (int i = 0; i < data.size(); ++i) {
+                case "2":
+                    for (int i = data.size() - 1; i >= 0; --i) {
                         if (data.get(i).isAlbum() || data.get(i).getCreator().getUsername() == self.getUsername()) {
                             data.remove(i);
                         }
                     }
+                    Log.d("fuck", "come here 2");
                     break;
-                case "4":
-                    for (int i = 0; i < data.size(); ++i) {
+                case "3":
+                    for (int i = data.size() - 1; i >= 0; --i) {
                         if (!data.get(i).isAlbum()) {
                             data.remove(i);
                         }
                     }
+                    Log.d("fuck", "come here 3");
                     break;
             }
             this.list = data;
