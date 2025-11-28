@@ -1,6 +1,10 @@
 package com.example.neteasecloudmusic.ui.main;
 
 import android.animation.ObjectAnimator;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -11,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -24,6 +29,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -42,6 +48,7 @@ import com.example.neteasecloudmusic.data.model.SingletonPlaylist;
 import com.example.neteasecloudmusic.data.model.SingletonUser;
 import com.example.neteasecloudmusic.data.model.Song;
 import com.example.neteasecloudmusic.data.model.User;
+import com.example.neteasecloudmusic.service.PlayerForegroundService;
 import com.example.neteasecloudmusic.ui.followed.FollowedFragment;
 import com.example.neteasecloudmusic.ui.home.HomeFragment;
 import com.example.neteasecloudmusic.ui.mine.MineFragment;
@@ -84,12 +91,68 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private ObjectAnimator rotationAnimator;
     private TextView currentSongInformation;
     private CircularProgressIndicator circularProgressIndicator;
+    private ViewFlipper songViewFlipper;
 
-    private ExoPlayer player;
-    private DefaultDataSource.Factory dataSourceFactory;
-    private ConcatenatingMediaSource concatenatingMediaSource;
     private final Map<Long, Song> idSongMap = new HashMap<>();
-    private Handler handler = new Handler(Looper.getMainLooper());
+
+    private PlayerForegroundService playerService;
+    private boolean serviceBound = false;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            PlayerForegroundService.LocalBinder binder = (PlayerForegroundService.LocalBinder) service;
+            playerService = binder.getService();
+            serviceBound = true;
+
+            playerService.registerCallback(new PlayerForegroundService.PlayerCallback() {
+                @Override
+                public void onIsPlayingChanged(boolean isPlaying) {
+                    runOnUiThread(() -> {
+                        if (isPlaying) rotationAnimator.resume();
+                        else rotationAnimator.pause();
+                    });
+                }
+
+                @Override
+                public void onMediaItemTransition(@Nullable MediaItem mediaItem) {
+                    runOnUiThread(() -> {
+                        if (mediaItem == null) return;
+                        long id = Long.parseLong(mediaItem.mediaId);
+                        Song song = idSongMap.get(id);
+                        cover.setRotation(0f);
+                        if (song != null && song.getCover() != null) {
+                            cover.setImageBitmap(song.getCover());
+                        } else {
+                            cover.setImageResource(R.drawable.user_avatar);
+                        }
+                        if (song != null) {
+                            currentSongInformation.setText(song.getTitle() + " -" + song.getAuthor().getUsername());
+                        }
+                    });
+                }
+
+                @Override
+                public void onProgress(long pos, long dur) {
+                    runOnUiThread(() -> {
+                        if (circularProgressIndicator != null) {
+                            int max = circularProgressIndicator.getMax();
+                            int progress = 0;
+                            if (dur > 0 && dur != C.TIME_UNSET) {
+                                progress = (int) (pos * max / dur);
+                            }
+                            circularProgressIndicator.setProgress(progress, true);
+                        }
+                    });
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            serviceBound = false;
+            playerService = null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,16 +251,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         playOrPause = findViewById(R.id.player_window_play_or_pause);
         playOrPause.setOnClickListener(new View.OnClickListener() {
             boolean isPlay = true;
-
             @Override
             public void onClick(View v) {
-                if (player != null) {
+                if (serviceBound && playerService != null) {
+                    playerService.togglePlay();
+
                     if (isPlay) {
                         playOrPause.setImageResource(R.drawable.player_window_pause);
-                        if (!player.isPlaying()) player.play();
                     } else {
                         playOrPause.setImageResource(R.drawable.player_window_play);
-                        if (player.isPlaying()) player.pause();
                     }
                     isPlay = !isPlay;
                 }
@@ -378,7 +440,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                 } else {
                     local.setList(list);
                     Log.d("fuck", list.toString());
-                    onInitPlayer();
+
+                    Intent intent = new Intent(this, PlayerForegroundService.class);
+                    ContextCompat.startForegroundService(this, intent);
+                    bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
                 }
             });
             return null;
@@ -400,90 +465,18 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         }
     }
 
-    private void onInitPlayer() {
-        player = new ExoPlayer.Builder(this).build();
-        dataSourceFactory = new DefaultDataSource.Factory(this);
-        concatenatingMediaSource = new ConcatenatingMediaSource();
-
-        for (Song song : local.getList()) {
-            MediaItem mediaItem = new MediaItem.Builder()
-                    .setUri(Uri.parse("file://" + song.getPath()))
-                    .setMediaId(String.valueOf(song.getId()))
-                    .build();
-            MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(mediaItem);
-            concatenatingMediaSource.addMediaSource(mediaSource);
-        }
-
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onIsPlayingChanged(boolean isPlaying) {
-                if (isPlaying) {
-                    rotationAnimator.resume();
-                } else {
-                    rotationAnimator.pause();
-                }
-            }
-
-            @Override
-            public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
-                cover.setRotation(0f);
-
-                long id = Long.parseLong(mediaItem.mediaId);
-                Song song = idSongMap.get(id);
-                if (song.getCover() != null) {
-                    cover.setImageBitmap(idSongMap.get(id).getCover());
-                } else {
-                    cover.setImageResource(R.drawable.user_avatar);
-                }
-                currentSongInformation.setText(song.getTitle() + " -" + song.getAuthor().getUsername());
-            }
-        });
-
-        player.setRepeatMode(Player.REPEAT_MODE_ALL); // 列表循环播放
-        player.setMediaSource(concatenatingMediaSource);
-        player.prepare();
-
-        int nextIndex = player.getNextMediaItemIndex();
-        if (nextIndex != C.INDEX_UNSET) {
-            MediaItem nextItem = player.getMediaItemAt(nextIndex);
-            long id = Long.parseLong(nextItem.mediaId);
-            if (idSongMap.containsKey(id) && idSongMap.get(id).getCover() != null) {
-                cover.setImageBitmap(idSongMap.get(id).getCover());
-            } else {
-                cover.setImageResource(R.drawable.user_avatar);
-            }
-        }
-
-        if (!player.isPlaying()) {
-            cover.setRotation(0f);
-            rotationAnimator.pause();
-        }
-
-        Runnable updateProgressAction = new Runnable() {
-            @Override
-            public void run() {
-                long pos = player.getCurrentPosition();
-                long dur = player.getDuration();
-
-                if (circularProgressIndicator != null) {
-                    int max = circularProgressIndicator.getMax();
-                    int progress = (int)(pos * max / dur);
-                    circularProgressIndicator.setProgress(progress, true);
-                }
-
-                handler.postDelayed(this, 16);
-            }
-        };
-
-        handler.post(updateProgressAction);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (player != null) {
-            player.release();
+        if (serviceBound) {
+            if (playerService != null) {
+                playerService.unregisterCallback(null);
+            }
+            unbindService(serviceConnection);
+            serviceBound = false;
         }
+
+        Intent intent = new Intent(this, PlayerForegroundService.class);
+        stopService(intent);
     }
 }
