@@ -11,15 +11,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
-import android.util.LruCache;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,14 +50,7 @@ import com.example.neteasecloudmusic.service.PlayerForegroundService;
 import com.example.neteasecloudmusic.ui.followed.FollowedFragment;
 import com.example.neteasecloudmusic.ui.home.HomeFragment;
 import com.example.neteasecloudmusic.ui.mine.MineFragment;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
@@ -89,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private ImageView playOrPause;
     private ImageView cover;
     private ObjectAnimator rotationAnimator;
-    private TextView currentSongInformation;
     private CircularProgressIndicator circularProgressIndicator;
     private ViewFlipper songViewFlipper;
 
@@ -97,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
 
     private PlayerForegroundService playerService;
     private boolean serviceBound = false;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             PlayerForegroundService.LocalBinder binder = (PlayerForegroundService.LocalBinder) service;
@@ -125,9 +115,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                         } else {
                             cover.setImageResource(R.drawable.user_avatar);
                         }
-                        if (song != null) {
-                            currentSongInformation.setText(song.getTitle() + " -" + song.getAuthor().getUsername());
-                        }
+
+                        // 同步更新 ViewFlipper 显示内容
+                        int index = playerService.getPlayer().getCurrentMediaItemIndex();
+                        songViewFlipper.setDisplayedChild(index);
                     });
                 }
 
@@ -137,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                         if (circularProgressIndicator != null) {
                             int max = circularProgressIndicator.getMax();
                             int progress = 0;
-                            if (dur > 0 && dur != C.TIME_UNSET) {
+                            if (dur > 0) {
                                 progress = (int) (pos * max / dur);
                             }
                             circularProgressIndicator.setProgress(progress, true);
@@ -170,9 +161,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
 
         initDrawerLayout();
 
-        // 让play_window的textView获得焦点以持续回马灯效果
-        findViewById(R.id.textView).setSelected(true);
-
         if (singleInstance == null) {
             singleInstance = SingletonUser.getInstance();
             self = singleInstance.getSelf();
@@ -196,6 +184,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         }
     }
 
+    /**
+     * 绑定视图并进行相关配置
+     * 包括抽屉、底部导航栏、播放窗口等
+     */
     private void bindView() {
         drawerLayout = findViewById(R.id.drawer_layout);
         drawer = findViewById(R.id.side_navigation_container);
@@ -205,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         for (int i = 0; i < menuView.getChildCount(); i++) {
             View item = menuView.getChildAt(i);
             item.setOnLongClickListener(v -> true);
-        } // 在这里要加入点击触发下拉刷新的逻辑
+        }
 
         sideNavigationContentContainer = drawer.findViewById(R.id.content_container);
 
@@ -268,17 +260,80 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
 
         cover = findViewById(R.id.player_window_cover);
 
+        // 播放窗口歌曲封面旋转动画
         rotationAnimator = ObjectAnimator.ofFloat(cover, "rotation", 0f, 360f);
         rotationAnimator.setDuration(20000);
         rotationAnimator.setInterpolator(new LinearInterpolator());
         rotationAnimator.setRepeatCount(ObjectAnimator.INFINITE);
         rotationAnimator.start();
 
-        currentSongInformation = findViewById(R.id.textView);
-
         circularProgressIndicator = findViewById(R.id.circular_progress_indicator);
+
+        songViewFlipper = findViewById(R.id.song_view_flipper);
+
+        songViewFlipper.setInAnimation(null);
+        songViewFlipper.setOutAnimation(null);
+
+        songViewFlipper.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    downX = event.getX();
+                    isDragging = false;
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    float moveX = event.getX();
+                    if (Math.abs(moveX - downX) > 50) {
+                        isDragging = true;
+                    }
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    if (isDragging) {
+                        float upX = event.getX();
+                        if (downX - upX > 100) {
+                            // 左滑切换下一首歌曲
+                            songViewFlipper.setOutAnimation(this, R.anim.slide_out_left);
+                            songViewFlipper.setInAnimation(this, R.anim.slide_in_right);
+                            songViewFlipper.showNext();
+                            playNextSong();
+                        } else if (upX - downX > 100) {
+                            // 右滑切换上一首歌曲
+                            songViewFlipper.setOutAnimation(this, R.anim.slide_out_right);
+                            songViewFlipper.setInAnimation(this, R.anim.slide_in_left);
+                            songViewFlipper.showPrevious();
+                            playPreviousSong();
+                        }
+                    }
+                    return true;
+            }
+            return false;
+        });
     }
 
+    private float downX;
+    private boolean isDragging = false;
+
+    /**
+     * 前台服务播放下一首歌曲
+     */
+    private void playNextSong() {
+        if (playerService != null) {
+            playerService.getPlayer().seekToNext();
+        }
+    }
+
+    /**
+     * 前台服务播放上一首歌曲
+     */
+    private void playPreviousSong() {
+        if (playerService != null) {
+            playerService.getPlayer().seekToPrevious();
+        }
+    }
+
+    /**
+     * 底部导航栏的初始化操作
+     * 根据选中的 item 切换 Fragment
+     */
     private void initBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
@@ -297,8 +352,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     }
 
     /**
-     * mask夹在drawer和ViewPager2中间以防止滑动drawer存在滑动冲突
-     * 在drawer存在期间让mask吃掉ACTION_DOWN防止继续向下传播
+     * 抽屉的初始化操作
+     * 做的事情有回调遮罩状态和 back 键优先关闭抽屉
+     * 遮罩在抽屉和 ViewPager2 中间来避免滑动抽屉存在滑动冲突
+     * 抽屉覆盖期间遮罩吃掉 ACTION_DOWN 防止事件继续向下传播
      */
     private void initDrawerLayout() {
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -335,9 +392,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                     MainActivity.super.onBackPressed();
                 }
             }
-        }); // 设置返回键优先关闭抽屉
+        }); // 设置 back 键优先关闭抽屉
     }
 
+    /**
+     * 检查权限状态
+     * 没有则请求权限；
+     * 有则调用 startQuerySongs 方法开始查询本地歌曲
+     */
     private void checkSongsPermission() {
         String[] permissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 ? new String[]{android.Manifest.permission.READ_MEDIA_AUDIO}
@@ -358,6 +420,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         }
     }
 
+    /**
+     * 回调 READ_MEDIA_AUDIO 和 READ_EXTERNAL_STORAGE 权限请求结果
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -377,6 +442,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         }
     }
 
+    /**
+     * 使用 CompletableFuture 异步查询本地音频文件
+     * 结果返回主线程后给 ViewFlipper 添加歌曲信息
+     */
     private void startQuerySongs() {
         CompletableFuture<List<Song>> queryFuture = CompletableFuture.supplyAsync(() -> {
             List<Song> result = new ArrayList<>();
@@ -441,6 +510,26 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                     local.setList(list);
                     Log.d("fuck", list.toString());
 
+                    // 动态添加歌曲信息到 ViewFlipper
+                    if (local != null && local.getList() != null) {
+                        for (Song song : local.getList()) {
+                            TextView textView = new TextView(this);
+                            textView.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                            ));
+                            textView.setGravity(Gravity.CENTER_VERTICAL);
+                            textView.setText(song.getTitle() + " - " + song.getAuthor().getUsername());
+                            textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                            textView.setMarqueeRepeatLimit(-1);
+                            textView.setSingleLine(true);
+                            textView.setFocusable(true);
+                            textView.setFocusableInTouchMode(true);
+                            textView.setSelected(true);
+                            songViewFlipper.addView(textView);
+                        }
+                    }
+
                     Intent intent = new Intent(this, PlayerForegroundService.class);
                     ContextCompat.startForegroundService(this, intent);
                     bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -450,6 +539,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         });
     }
 
+    /**
+     * 配置发生改变时保存单例状态
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -465,6 +557,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         }
     }
 
+    /**
+     * 解绑和停止前台服务
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

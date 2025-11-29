@@ -30,18 +30,30 @@
         app:layout_constraintTop_toTopOf="@id/player_window_record"
         app:layout_constraintEnd_toEndOf="@id/player_window_record"/>
 
-    <TextView
-        android:id="@+id/textView"
+<!--    <TextView-->
+<!--        android:id="@+id/textView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:text="Serenade from String Quartet in F Major, Op. 3,No. 5 - Lazar Gosman"-->
+<!--        android:singleLine="true"-->
+<!--        android:ellipsize="marquee"-->
+<!--        android:marqueeRepeatLimit="marquee_forever"-->
+<!--        android:focusable="true"-->
+<!--        android:focusableInTouchMode="true"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/player_window_play_or_pause"-->
+<!--        app:layout_constraintStart_toEndOf="@id/player_window_record"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <ViewFlipper
+        android:id="@+id/song_view_flipper"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
-        android:gravity="center_vertical"
-        android:text="Serenade from String Quartet in F Major, Op. 3,No. 5 - Lazar Gosman"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right"
+        android:flipInterval="3000"
         app:layout_constraintEnd_toStartOf="@id/player_window_play_or_pause"
         app:layout_constraintStart_toEndOf="@id/player_window_record"
         app:layout_constraintTop_toTopOf="parent" />
