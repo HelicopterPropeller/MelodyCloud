@@ -34,10 +34,6 @@ public class HomeRecommendFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public HomeRecommendFragment() {
         // Required empty public constructor
     }
@@ -64,8 +60,9 @@ public class HomeRecommendFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -76,11 +73,9 @@ public class HomeRecommendFragment extends Fragment {
         return inflater.inflate(R.layout.home_outer, container, false);
     }
 
-    private OuterRecyclerView rv;
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        rv = view.findViewById(R.id.outer_recycler_view);
+        OuterRecyclerView rv = view.findViewById(R.id.outer_recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
         OuterRecyclerViewAdapter adapter = new OuterRecyclerViewAdapter(Recommend.recommendsPageDataSimulation());

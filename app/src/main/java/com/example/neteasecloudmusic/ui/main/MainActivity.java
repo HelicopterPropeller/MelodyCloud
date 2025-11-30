@@ -73,9 +73,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private final Executor executorPool = Executors.newSingleThreadExecutor();
 
     private DrawerLayout drawerLayout;
-    private ViewGroup drawer;
     private BottomNavigationView bottomNavigation;
-    private ViewGroup sideNavigationContentContainer;
     private View mask;
     private ImageView playOrPause;
     private ImageView cover;
@@ -190,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
      */
     private void bindView() {
         drawerLayout = findViewById(R.id.drawer_layout);
-        drawer = findViewById(R.id.side_navigation_container);
+        ViewGroup drawer = findViewById(R.id.side_navigation_container);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         ViewGroup menuView = (ViewGroup) bottomNavigation.getChildAt(0);
@@ -199,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
             item.setOnLongClickListener(v -> true);
         }
 
-        sideNavigationContentContainer = drawer.findViewById(R.id.content_container);
+        ViewGroup sideNavigationContentContainer = drawer.findViewById(R.id.content_container);
 
         List<View> sideNavigationItems = new ArrayList<>();
         sideNavigationItems.add(sideNavigationContentContainer.findViewById(R.id.message));

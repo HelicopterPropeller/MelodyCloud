@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="47dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/playing_vip"
+        android:layout_width="16dp"
+        android:layout_height="11dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="19dp"
+        app:layout_goneMarginStart="0dp"
+        android:background="@drawable/background_red_rounded"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:padding="2dp"
+        android:text="VIP"
+        android:textColor="@color/netease_red"
+        android:textSize="6sp" />
+
+    <TextView
+        android:id="@+id/playing_song"
+        android:layout_width="237dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="6dp"
+        android:includeFontPadding="false"
+        android:text="The Great Gig in the Sky · Pink Floyd"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:ellipsize="end" />
+
+    <ImageView
+        android:id="@+id/playing_delete"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/playing_remove"
+        android:layout_marginStart="5dp"
+        />
+
+</LinearLayout>
