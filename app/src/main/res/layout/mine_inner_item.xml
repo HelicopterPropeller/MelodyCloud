@@ -85,13 +85,13 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@drawable/background_capsule"
-        android:backgroundTint="#60C9C8CD"
+        android:backgroundTint="#EAEEF1"
         android:visibility="gone">
         
         <ImageView
             android:layout_width="14dp"
             android:layout_height="14dp"
-            android:src="@drawable/recommend_heartbeat"
+            android:src="@drawable/mine_dokidoki"
             android:layout_marginStart="8dp"
             app:tint="@color/netease_red" />
         

@@ -50,6 +50,7 @@ import com.example.neteasecloudmusic.service.PlayerForegroundService;
 import com.example.neteasecloudmusic.ui.followed.FollowedFragment;
 import com.example.neteasecloudmusic.ui.home.HomeFragment;
 import com.example.neteasecloudmusic.ui.mine.MineFragment;
+import com.example.neteasecloudmusic.ui.player.PlayerFragment;
 import com.example.neteasecloudmusic.ui.player.PlayingFragment;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private CircularProgressIndicator circularProgressIndicator;
     private ViewFlipper songViewFlipper;
     private ImageView playing;
+    private ViewGroup playerWindow;
 
     private final Map<Long, Song> idSongMap = new HashMap<>();
 
@@ -313,6 +315,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
             return false;
         });
 
+        playerWindow = findViewById(R.id.player_window);
+        playerWindow.setOnClickListener(v -> {
+            PlayerFragment fragment = PlayerFragment.newInstance("", "");
+            mask.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.mask, fragment).commit();
+        });
+
         playing = findViewById(R.id.player_window_playlist);
         playing.setOnClickListener(v -> {
             PlayingFragment fragment = PlayingFragment.newInstance("", "");
@@ -520,7 +529,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                 } else {
                     SingletonPlaylist.getInstance().getLocal().setList(list);
                     local.setList(list);
-                    Log.d("fuck", list.toString());
 
                     // 动态添加歌曲信息到 ViewFlipper
                     if (local != null && local.getList() != null) {

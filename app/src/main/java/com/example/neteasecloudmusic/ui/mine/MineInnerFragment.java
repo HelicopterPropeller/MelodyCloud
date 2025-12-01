@@ -97,7 +97,6 @@ public class MineInnerFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.mine_inner_recycler_view);
 
-        Log.d("fuck", self.getUsername());
         initDataSource();
 
         MineRecyclerViewAdapter adapter = new MineRecyclerViewAdapter(list);
@@ -112,7 +111,6 @@ public class MineInnerFragment extends Fragment {
             switch (mParam2) {
                 case "0":
                     // 近期要在Playlist加时间字段
-                    Log.d("fuck", "come here 0");
                     break;
                 case "1":
                     for (int i = data.size() - 1; i >= 0; --i) {
@@ -120,7 +118,6 @@ public class MineInnerFragment extends Fragment {
                             data.remove(i);
                         }
                     }
-                    Log.d("fuck", "come here 1");
                     break;
                 case "2":
                     for (int i = data.size() - 1; i >= 0; --i) {
@@ -128,7 +125,6 @@ public class MineInnerFragment extends Fragment {
                             data.remove(i);
                         }
                     }
-                    Log.d("fuck", "come here 2");
                     break;
                 case "3":
                     for (int i = data.size() - 1; i >= 0; --i) {
@@ -136,7 +132,6 @@ public class MineInnerFragment extends Fragment {
                             data.remove(i);
                         }
                     }
-                    Log.d("fuck", "come here 3");
                     break;
             }
             this.list = data;
