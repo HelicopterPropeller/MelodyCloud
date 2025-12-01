@@ -197,4 +197,15 @@ public class PlayingFragment extends BottomSheetDialogFragment {
             }
         }
     }
+
+    public void onPlaylistChanged() {
+        int size = SingletonPlaylist.getInstance().getLocal().getList().size();
+        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        if (tab != null && tab.getCustomView() != null) {
+            TextView num = tab.getCustomView().findViewById(R.id.num);
+            if (num != null) {
+                num.setText(size > 0 ? Integer.toString(size) : "");
+            }
+        }
+    }
 }

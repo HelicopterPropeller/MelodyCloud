@@ -35,6 +35,7 @@ public class PlayerForegroundService extends Service {
         void onIsPlayingChanged(boolean isPlaying);
         void onMediaItemTransition(@Nullable MediaItem mediaItem);
         void onProgress(long pos, long dur);
+        void onMediaItemRemoved(int index);
     }
 
     private final IBinder binder = new LocalBinder();
@@ -170,5 +171,28 @@ public class PlayerForegroundService extends Service {
 
     private int createNotificationId() {
         return NOTIFICATION_ID;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null && "request remove".equals(action)) {
+                int index = intent.getIntExtra("remove_index", -1);
+
+                if (player != null && index >= 0 && index < player.getMediaItemCount()) {
+                    int currentIndex = player.getCurrentMediaItemIndex();
+                    player.removeMediaItem(index);
+                    if (index < currentIndex) {
+                        player.seekTo(currentIndex - 1, player.getCurrentPosition());
+                    }
+                }
+
+                for (PlayerCallback cb : callbacks) {
+                    cb.onMediaItemRemoved(index);
+                }
+            }
+        }
+        return START_NOT_STICKY;
     }
 }

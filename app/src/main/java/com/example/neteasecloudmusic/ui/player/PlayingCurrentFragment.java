@@ -1,5 +1,6 @@
 package com.example.neteasecloudmusic.ui.player;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.neteasecloudmusic.R;
 import com.example.neteasecloudmusic.data.model.SingletonPlaylist;
 import com.example.neteasecloudmusic.data.model.Song;
+import com.example.neteasecloudmusic.service.PlayerForegroundService;
 
 import java.util.List;
 
@@ -81,15 +83,18 @@ public class PlayingCurrentFragment extends Fragment {
         songs = view.findViewById(R.id.current_songs);
 
         songs.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        songs.setAdapter(new SongAdapter(SingletonPlaylist.getInstance().getLocal().getList()));
+        songs.setAdapter(new SongAdapter(SingletonPlaylist.getInstance().getLocal().getList()
+                , getParentFragment() != null ? getParentFragment() : this));
     }
 
     public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
         List<Song> list;
+        Fragment parentFragment;
 
-        public SongAdapter(List<Song> list) {
+        public SongAdapter(List<Song> list, Fragment parentFragment) {
             this.list = list;
+            this.parentFragment = parentFragment;
         }
 
         @NonNull
@@ -116,12 +121,29 @@ public class PlayingCurrentFragment extends Fragment {
 
             holder.information.setText(spannableString);
 
-//            holder.delete.setOnClickListener(v -> {
-//                list.remove(position);
-//                SingletonPlaylist.getInstance().getLocal().getList().remove(position);
-//
-//                notifyDataSetChanged();
-//            });
+            holder.delete.setOnClickListener(v -> {
+                int pos = holder.getBindingAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
+
+                list.remove(pos);
+
+                notifyItemRemoved(pos);
+                notifyItemRangeChanged(pos, Math.max(0, list.size() - pos));
+
+                Intent intent = new Intent(holder.itemView.getContext(), PlayerForegroundService.class);
+                intent.setAction("request remove");
+                intent.putExtra("remove_index", pos);
+                holder.itemView.getContext().startService(intent);
+
+                if (parentFragment instanceof PlayingFragment) {
+                    ((PlayingFragment) parentFragment).onPlaylistChanged();
+                } else {
+                    Fragment p = parentFragment.getParentFragment();
+                    if (p instanceof PlayingFragment) {
+                        ((PlayingFragment) p).onPlaylistChanged();
+                    }
+                }
+            });
         }
 
         @Override

@@ -135,6 +135,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                         }
                     });
                 }
+
+                @Override
+                public void onMediaItemRemoved(int index) {
+                    songViewFlipper.removeViewAt(index);
+                }
             });
         }
 
