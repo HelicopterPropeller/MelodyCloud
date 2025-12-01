@@ -50,6 +50,7 @@ import com.example.neteasecloudmusic.service.PlayerForegroundService;
 import com.example.neteasecloudmusic.ui.followed.FollowedFragment;
 import com.example.neteasecloudmusic.ui.home.HomeFragment;
 import com.example.neteasecloudmusic.ui.mine.MineFragment;
+import com.example.neteasecloudmusic.ui.player.PlayingFragment;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private ObjectAnimator rotationAnimator;
     private CircularProgressIndicator circularProgressIndicator;
     private ViewFlipper songViewFlipper;
+    private ImageView playing;
 
     private final Map<Long, Song> idSongMap = new HashMap<>();
 
@@ -305,6 +307,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
             }
             return false;
         });
+
+        playing = findViewById(R.id.player_window_playlist);
+        playing.setOnClickListener(v -> {
+            PlayingFragment fragment = PlayingFragment.newInstance("", "");
+            fragment.show(getSupportFragmentManager(), "PlayingFragment");
+        });
     }
 
     private float downX;
@@ -505,6 +513,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                 if (throwable != null) {
                     Toast.makeText(this, "查询失败：" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
+                    SingletonPlaylist.getInstance().getLocal().setList(list);
                     local.setList(list);
                     Log.d("fuck", list.toString());
 

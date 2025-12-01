@@ -28,7 +28,7 @@
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/random_play"
-                android:layout_marginStart="9dp"
+                android:layout_marginStart="12dp"
                 />
 
             <TextView
