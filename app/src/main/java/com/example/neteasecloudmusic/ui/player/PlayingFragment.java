@@ -187,23 +187,17 @@ public class PlayingFragment extends BottomSheetDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog instanceof BottomSheetDialog) {
-            BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;
-            FrameLayout bottomSheet =
-                    bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-
+        Dialog d = getDialog();
+        if (d instanceof BottomSheetDialog) {
+            BottomSheetDialog dialog = (BottomSheetDialog) d;
+            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
             if (bottomSheet != null) {
-                BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(bottomSheet);
-
-                bottomSheet.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-
-                behavior.setPeekHeight(0);
-                behavior.setSkipCollapsed(true);
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
+                BottomSheetBehavior.from(bottomSheet).setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
             }
         }
     }
+
     public void onPlaylistChanged() {
         int size = SingletonPlaylist.getInstance().getLocal().getList().size();
         TabLayout.Tab tab = tabLayout.getTabAt(0);

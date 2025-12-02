@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2e140e"
+    android:background="#0B1D45"
     android:orientation="vertical"
     tools:context=".ui.player.PlayerFragment">
 
@@ -49,6 +49,11 @@
             android:text="为你推荐的相似歌曲"
             android:textSize="12sp"
             android:textColor="#BAB9B4"
+            android:fontFamily="sans-serif-black"
+            android:shadowColor="#CC000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,8 +66,8 @@
         android:layout_width="267dp"
         android:layout_height="267dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="-66dp"
-        android:src="@drawable/player_window_record"
+        android:layout_marginTop="-60dp"
+        android:src="@drawable/disk"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stylus" />
@@ -73,6 +78,7 @@
         android:layout_height="168dp"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
+        android:src="@drawable/groupies"
         app:layout_constraintBottom_toBottomOf="@id/record"
         app:layout_constraintEnd_toEndOf="@id/record"
         app:layout_constraintStart_toStartOf="@id/record"
@@ -83,8 +89,8 @@
         android:layout_width="152dp"
         android:layout_height="136dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="9dp"
-        android:layout_marginStart="46dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="50dp"
         android:src="@drawable/stylus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,6 +111,11 @@
         android:text="小圆舞曲（电影《蓝色大门》主题曲）"
         android:textSize="16sp"
         android:textColor="#C4BEB2"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/record" />
 
@@ -117,6 +128,11 @@
         android:text="陈绮贞"
         android:textSize="13sp"
         android:textColor="#BAB9B4"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/song_name" />
@@ -130,23 +146,23 @@
         app:layout_constraintTop_toTopOf="@id/song_author"
         app:tint="@color/content" />
 
-    <TextView
-        android:id="@+id/vip"
-        android:layout_width="25dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="5dp"
-        android:text="VIP"
-        android:textSize="8sp"
-        android:textColor="@color/content"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="@id/song_name"
-        app:layout_constraintStart_toEndOf="@id/song_name"
-        app:layout_constraintTop_toTopOf="@id/song_name" />
+<!--    <TextView-->
+<!--        android:id="@+id/vip"-->
+<!--        android:layout_width="25dp"-->
+<!--        android:layout_height="15dp"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:text="VIP"-->
+<!--        android:textSize="8sp"-->
+<!--        android:textColor="@color/content"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/song_name"-->
+<!--        app:layout_constraintStart_toEndOf="@id/song_name"-->
+<!--        app:layout_constraintTop_toTopOf="@id/song_name" />-->
 
     <ImageView
         android:id="@+id/heart"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:layout_marginEnd="38dp"
         android:layout_marginTop="59dp"
         android:src="@drawable/recommend_heart"
@@ -154,16 +170,58 @@
         app:layout_constraintTop_toBottomOf="@id/record"
         app:tint="#BAB9B4" />
 
+    <TextView
+        android:id="@+id/heart_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/heart"
+        app:layout_constraintTop_toTopOf="@id/heart"
+        android:layout_marginStart="-13dp"
+        android:text="70w+"
+        android:textSize="8sp"
+        android:textColor="#BAB9B4"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="#0B1D45"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
+        android:paddingStart="3dp"
+        android:paddingBottom="1dp"
+        />
+
     <ImageView
         android:id="@+id/recommend"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:layout_marginEnd="23dp"
         android:src="@drawable/recommend"
         app:layout_constraintBottom_toBottomOf="@id/heart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/heart"
         app:tint="#BAB9B4" />
+
+    <TextView
+        android:id="@+id/recommend_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/recommend"
+        app:layout_constraintTop_toTopOf="@id/recommend"
+        android:layout_marginStart="-13dp"
+        android:text="999+"
+        android:textSize="8sp"
+        android:textColor="#BAB9B4"
+        android:background="@drawable/background_rounded"
+        android:backgroundTint="#0B1D45"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
+        android:paddingStart="3dp"
+        android:paddingBottom="1dp"
+        />
 
     <View
         android:id="@+id/progress"
@@ -207,6 +265,11 @@
         android:textSize="10sp"
         android:textColor="#BAB9B4"
         android:gravity="center"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
         app:layout_constraintEnd_toEndOf="@id/progress"
         app:layout_constraintStart_toStartOf="@id/progress"
         app:layout_constraintTop_toBottomOf="@id/progress" />

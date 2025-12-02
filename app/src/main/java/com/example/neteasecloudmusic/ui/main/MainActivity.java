@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -318,8 +317,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         playerWindow = findViewById(R.id.player_window);
         playerWindow.setOnClickListener(v -> {
             PlayerFragment fragment = PlayerFragment.newInstance("", "");
-            mask.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.mask, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment)
+                    .addToBackStack(null).commit();
         });
 
         playing = findViewById(R.id.player_window_playlist);
@@ -593,5 +592,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
 
         Intent intent = new Intent(this, PlayerForegroundService.class);
         stopService(intent);
+    }
+
+    public PlayerForegroundService getPlayerService() {
+        return playerService;
+    }
+
+    public Map getIdSongMap() {
+        return idSongMap;
     }
 }

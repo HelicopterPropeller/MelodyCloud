@@ -173,6 +173,35 @@ public class PlayerForegroundService extends Service {
         return NOTIFICATION_ID;
     }
 
+    public void skipToNext() {
+        if (player == null) return;
+        int count = player.getMediaItemCount();
+        if (count == 0) return;
+
+        int current = player.getCurrentMediaItemIndex();
+        int next = current + 1;
+        if (next >= count) {
+            next = 0;
+        }
+        player.seekTo(next, 0);
+        player.play();
+    }
+
+    public void skipToPrevious() {
+        if (player == null) return;
+        int count = player.getMediaItemCount();
+        if (count == 0) return;
+
+        int current = player.getCurrentMediaItemIndex();
+        long pos = player.getCurrentPosition();
+        int prev = current - 1;
+        if (prev < 0) {
+            prev = count - 1;
+        }
+        player.seekTo(prev, 0);
+        player.play();
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
