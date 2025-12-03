@@ -2,10 +2,7 @@ package com.example.neteasecloudmusic.ui.player;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.ServiceConnection;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,13 +12,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.IBinder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -100,7 +96,7 @@ public class PlayerFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof MainActivity) { // 或你的 Activity 名称
+        if (context instanceof MainActivity) {
             MainActivity activity = (MainActivity) context;
             playerService = activity.getPlayerService();
             idSongMap = activity.getIdSongMap();
@@ -109,7 +105,6 @@ public class PlayerFragment extends Fragment {
 
     private PlayerForegroundService playerService;
     private Map<Long, Song> idSongMap;
-    private boolean serviceBound = false;
 
     private PlayerForegroundService.PlayerCallback playerCallback;
 
@@ -122,7 +117,7 @@ public class PlayerFragment extends Fragment {
     ImageView stylus;
     ImageView cover;
     ImageView back;
-    View progress;
+    SeekBar progress;
     TextView now;
     TextView total;
     ImageView isPlay;
@@ -166,6 +161,8 @@ public class PlayerFragment extends Fragment {
         playing = view.findViewById(R.id.playing);
     }
 
+    private boolean isUserSeeking = false; // 标记用户是否正在拖动 SeekBar
+
     private void attachTransaction() {
 
         ObjectAnimator animator = ObjectAnimator.ofFloat(cover, "rotation", 0f, 360f);
@@ -174,6 +171,8 @@ public class PlayerFragment extends Fragment {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.start();
         animator.pause();
+
+        progress.setProgress(0);
 
         if (song != null) {
             name.setText(song.getTitle());
@@ -192,6 +191,7 @@ public class PlayerFragment extends Fragment {
                 isPlay.setImageResource(R.drawable.recommend_play);
             }
             animator.start();
+            progress.setMax((int)song.getDuration());
         }
 
         name.post(() -> name.setSelected(true)); /* 歌曲名的走马灯焦点 */
@@ -210,6 +210,33 @@ public class PlayerFragment extends Fragment {
 
         previous.setOnClickListener(v -> playerService.skipToPrevious());
         next.setOnClickListener(v -> playerService.skipToNext());
+
+        progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser && playerService != null) {
+                    long duration = playerService.getPlayer().getDuration();
+                    long newPosition = (duration * progress) / seekBar.getMax();
+                    now.setText(Utils.formatTime(newPosition));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isUserSeeking = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isUserSeeking = false;
+                if (playerService != null) {
+                    long duration = playerService.getPlayer().getDuration();
+                    long newPosition = (duration * seekBar.getProgress()) / seekBar.getMax();
+                    playerService.getPlayer().seekTo(newPosition);
+                    now.setText(Utils.formatTime(newPosition));
+                }
+            }
+        });
 
         playerCallback  = new PlayerForegroundService.PlayerCallback() {
             @Override
@@ -244,6 +271,10 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onProgress(long pos, long dur) {
                 now.setText(Utils.formatTime(pos));
+                if (!isUserSeeking) {
+                    int progressValue = dur > 0 ? (int) ((pos * progress.getMax()) / dur) : 0;
+                    progress.setProgress(progressValue);
+                }
             }
 
             @Override

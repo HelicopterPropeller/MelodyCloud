@@ -1,5 +1,6 @@
 package com.example.neteasecloudmusic.ui.player;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,8 +27,11 @@ import com.example.neteasecloudmusic.R;
 import com.example.neteasecloudmusic.data.model.SingletonPlaylist;
 import com.example.neteasecloudmusic.data.model.Song;
 import com.example.neteasecloudmusic.service.PlayerForegroundService;
+import com.example.neteasecloudmusic.ui.main.MainActivity;
+import com.google.android.exoplayer2.MediaItem;
 
 import java.util.List;
+import java.util.Map;
 
 public class PlayingCurrentFragment extends Fragment {
 
@@ -67,6 +72,23 @@ public class PlayingCurrentFragment extends Fragment {
         }
     }
 
+    private PlayerForegroundService playerService;
+    private Map<Long, Song> idSongMap;
+
+    private PlayerForegroundService.PlayerCallback playerCallback;
+    private SongAdapter adapter;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof MainActivity) { // 或你的 Activity 名称
+            MainActivity activity = (MainActivity) context;
+            playerService = activity.getPlayerService();
+            idSongMap = activity.getIdSongMap();
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,14 +105,63 @@ public class PlayingCurrentFragment extends Fragment {
         songs = view.findViewById(R.id.current_songs);
 
         songs.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        songs.setAdapter(new SongAdapter(SingletonPlaylist.getInstance().getLocal().getList()
-                , getParentFragment() != null ? getParentFragment() : this));
+        adapter = new SongAdapter(SingletonPlaylist.getInstance().getLocal().getList()
+                , getParentFragment() != null ? getParentFragment() : this);
+        songs.setAdapter(adapter);
+
+        // 初始化当前播放 id（如果服务已绑定）
+        long currentId = -1;
+        if (playerService != null && playerService.getPlayer() != null && playerService.getPlayer().getCurrentMediaItem() != null) {
+            try {
+                MediaItem mi = playerService.getPlayer().getCurrentMediaItem();
+                if (mi != null && mi.mediaId != null) {
+                    currentId = Long.parseLong(mi.mediaId);
+                }
+            } catch (Exception ignore) {}
+        }
+        adapter.setCurrentPlayingId(currentId);
+
+        // 注册回调以在播放切换时更新 item 显示
+        playerCallback = new PlayerForegroundService.PlayerCallback() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {}
+
+            @Override
+            public void onMediaItemTransition(@Nullable MediaItem mediaItem) {
+                if (mediaItem == null || adapter == null) return;
+                try {
+                    long id = Long.parseLong(mediaItem.mediaId);
+                    requireActivity().runOnUiThread(() -> adapter.setCurrentPlayingId(id));
+                } catch (Exception ignore) {}
+            }
+
+            @Override
+            public void onProgress(long pos, long dur) {}
+
+            @Override
+            public void onMediaItemRemoved(int index) {}
+        };
+
+        if (playerService != null) {
+            playerService.registerCallback(playerCallback);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (playerService != null && playerCallback != null) {
+            playerService.unregisterCallback(playerCallback);
+        }
     }
 
     public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
         List<Song> list;
         Fragment parentFragment;
+
+        private long currentPlayingId = -1;
+        private int currentPlayingPos = -1;
 
         public SongAdapter(List<Song> list, Fragment parentFragment) {
             this.list = list;
@@ -107,6 +178,7 @@ public class PlayingCurrentFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull SongHolder holder, int position) {
             Song song = list.get(position);
+
             if (song.isVip() != null && !song.isVip()) {
                 holder.vip.setVisibility(View.GONE);
             }
@@ -120,6 +192,16 @@ public class PlayingCurrentFragment extends Fragment {
             spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#7E8386")), song.getTitle().length() + 1, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             holder.information.setText(spannableString);
+
+            if (song.getId() == currentPlayingId) {
+                holder.currentPlaying.setVisibility(View.VISIBLE);
+                holder.information.setTextColor(ContextCompat.getColor(requireContext(), R.color.netease_red));
+                holder.itemView.setBackgroundColor(Color.parseColor("#F6F6F6"));
+            } else {
+                holder.currentPlaying.setVisibility(View.GONE);
+                holder.information.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+                holder.itemView.setBackground(null);
+            }
 
             holder.delete.setOnClickListener(v -> {
                 int pos = holder.getBindingAdapterPosition();
@@ -156,6 +238,22 @@ public class PlayingCurrentFragment extends Fragment {
             });
         }
 
+        public void setCurrentPlayingId(long id) {
+            if (id == currentPlayingId) return;
+            int newPos = -1;
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getId() == id) {
+                    newPos = i;
+                    break;
+                }
+            }
+            int oldPos = currentPlayingPos;
+            currentPlayingId = id;
+            currentPlayingPos = newPos;
+            if (oldPos != -1) notifyItemChanged(oldPos);
+            if (newPos != -1) notifyItemChanged(newPos);
+        }
+
         @Override
         public int getItemCount() {
             return list.size();
@@ -166,6 +264,7 @@ public class PlayingCurrentFragment extends Fragment {
             TextView vip;
             TextView information;
             ImageView delete;
+            ImageView currentPlaying;
 
             public SongHolder(@NonNull View itemView) {
                 super(itemView);
@@ -173,6 +272,7 @@ public class PlayingCurrentFragment extends Fragment {
                 vip = itemView.findViewById(R.id.playing_vip);
                 information = itemView.findViewById(R.id.playing_song);
                 delete = itemView.findViewById(R.id.playing_delete);
+                currentPlaying = itemView.findViewById(R.id.current_playing);
             }
         }
 

@@ -2,11 +2,9 @@ package com.example.neteasecloudmusic.ui.player;
 
 import android.animation.ValueAnimator;
 import android.app.Dialog;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -166,21 +164,19 @@ public class PlayingFragment extends BottomSheetDialogFragment {
         });
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            if (tab != null) {
-                View custom = LayoutInflater.from(requireContext()).inflate(R.layout.playing_tab_item, null);
+            View custom = LayoutInflater.from(requireContext()).inflate(R.layout.playing_tab_item, null);
 
-                TextView type = custom.findViewById(R.id.type);
-                type.setText(types.get(position));
+            TextView type = custom.findViewById(R.id.type);
+            type.setText(types.get(position));
 
-                TextView num = custom.findViewById(R.id.num);
-                if (nums.get(position).equals("null")) {
-                    num.setText("");
-                } else {
-                    num.setText(nums.get(position));
-                }
-
-                tab.setCustomView(custom);
+            TextView num = custom.findViewById(R.id.num);
+            if (nums.get(position).equals("null")) {
+                num.setText("");
+            } else {
+                num.setText(nums.get(position));
             }
+
+            tab.setCustomView(custom);
         }).attach();
     }
 

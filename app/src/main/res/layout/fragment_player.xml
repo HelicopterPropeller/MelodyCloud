@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0B1D45"
@@ -24,41 +24,39 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/back"
-            app:tint="#BAB9B4"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/share"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
             android:src="@drawable/share"
-            app:tint="#BAB9B4"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:layout_gravity="center"
-            android:text="为你推荐的相似歌曲"
-            android:textSize="12sp"
-            android:textColor="#BAB9B4"
             android:fontFamily="sans-serif-black"
             android:shadowColor="#CC000000"
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="1"
-            app:layout_constraintTop_toTopOf="parent"
+            android:text="本地音乐"
+            android:textColor="#BAB9B4"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -89,8 +87,8 @@
         android:layout_width="152dp"
         android:layout_height="136dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="3dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="3dp"
         android:src="@drawable/stylus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,73 +97,73 @@
     <TextView
         android:id="@+id/song_name"
         android:layout_width="137dp"
-        android:layout_height="19dp"
-        android:layout_marginTop="49dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="49dp"
         android:ellipsize="marquee"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:fontFamily="sans-serif-black"
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:text="小圆舞曲（电影《蓝色大门》主题曲）"
-        android:textSize="16sp"
-        android:textColor="#C4BEB2"
-        android:fontFamily="sans-serif-black"
         android:shadowColor="#CC000000"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="1"
+        android:singleLine="true"
+        android:text="小圆舞曲（电影《蓝色大门》主题曲）"
+        android:textColor="#C4BEB2"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/record" />
 
     <TextView
         android:id="@+id/song_author"
         android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:text="陈绮贞"
-        android:textSize="13sp"
-        android:textColor="#BAB9B4"
+        android:layout_marginTop="9dp"
         android:fontFamily="sans-serif-black"
+        android:gravity="center"
         android:shadowColor="#CC000000"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="1"
-        android:gravity="center"
+        android:text="陈绮贞"
+        android:textColor="#4D5D81"
+        android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/song_name" />
-    
+
     <ImageView
         android:id="@+id/expand"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
         android:src="@drawable/recommend_expand"
+        app:layout_constraintBottom_toBottomOf="@+id/song_author"
         app:layout_constraintStart_toEndOf="@id/song_author"
         app:layout_constraintTop_toTopOf="@id/song_author"
-        android:layout_marginTop="1dp"
-        app:tint="@color/content" />
+        app:tint="#4D5D81" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/vip"-->
-<!--        android:layout_width="25dp"-->
-<!--        android:layout_height="15dp"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:text="VIP"-->
-<!--        android:textSize="8sp"-->
-<!--        android:textColor="@color/content"-->
-<!--        android:gravity="center"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/song_name"-->
-<!--        app:layout_constraintStart_toEndOf="@id/song_name"-->
-<!--        app:layout_constraintTop_toTopOf="@id/song_name" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/vip"-->
+    <!--        android:layout_width="25dp"-->
+    <!--        android:layout_height="15dp"-->
+    <!--        android:layout_marginStart="5dp"-->
+    <!--        android:text="VIP"-->
+    <!--        android:textSize="8sp"-->
+    <!--        android:textColor="@color/content"-->
+    <!--        android:gravity="center"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/song_name"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/song_name"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/song_name" />-->
 
     <ImageView
         android:id="@+id/heart"
         android:layout_width="26dp"
         android:layout_height="26dp"
-        android:layout_marginEnd="38dp"
         android:layout_marginTop="59dp"
+        android:layout_marginEnd="38dp"
         android:src="@drawable/recommend_heart"
         app:layout_constraintEnd_toStartOf="@id/recommend"
         app:layout_constraintTop_toBottomOf="@id/record"
@@ -175,22 +173,21 @@
         android:id="@+id/heart_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/heart"
-        app:layout_constraintTop_toTopOf="@id/heart"
         android:layout_marginStart="-13dp"
-        android:text="70w+"
-        android:textSize="8sp"
-        android:textColor="#BAB9B4"
         android:background="@drawable/background_rounded"
         android:backgroundTint="#0B1D45"
         android:fontFamily="sans-serif-black"
+        android:paddingStart="3dp"
+        android:paddingBottom="1dp"
         android:shadowColor="#CC000000"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="1"
-        android:paddingStart="3dp"
-        android:paddingBottom="1dp"
-        />
+        android:text="70w+"
+        android:textColor="#BAB9B4"
+        android:textSize="8sp"
+        app:layout_constraintStart_toEndOf="@id/heart"
+        app:layout_constraintTop_toTopOf="@id/heart" />
 
     <ImageView
         android:id="@+id/recommend"
@@ -207,30 +204,32 @@
         android:id="@+id/recommend_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/recommend"
-        app:layout_constraintTop_toTopOf="@id/recommend"
         android:layout_marginStart="-13dp"
-        android:text="999+"
-        android:textSize="8sp"
-        android:textColor="#BAB9B4"
         android:background="@drawable/background_rounded"
         android:backgroundTint="#0B1D45"
         android:fontFamily="sans-serif-black"
+        android:paddingStart="3dp"
+        android:paddingBottom="1dp"
         android:shadowColor="#CC000000"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="1"
-        android:paddingStart="3dp"
-        android:paddingBottom="1dp"
-        />
+        android:text="999+"
+        android:textColor="#BAB9B4"
+        android:textSize="8sp"
+        app:layout_constraintStart_toEndOf="@id/recommend"
+        app:layout_constraintTop_toTopOf="@id/recommend" />
 
-    <View
+    <SeekBar
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="19dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:progressTint="#828DA3"
+        android:progressBackgroundTint="#4D5B75"
+        android:thumb="@drawable/seekbar_thumb"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/song_author" />
@@ -243,6 +242,12 @@
         android:layout_marginTop="5dp"
         android:text="00:00"
         android:textSize="9sp"
+        android:textColor="#4D5D81"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
         app:layout_constraintStart_toStartOf="@id/progress"
         app:layout_constraintTop_toBottomOf="@id/progress" />
 
@@ -254,6 +259,12 @@
         android:layout_marginEnd="13dp"
         android:text="04:19"
         android:textSize="9sp"
+        android:textColor="#4D5D81"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="1"
         app:layout_constraintEnd_toEndOf="@id/progress"
         app:layout_constraintTop_toBottomOf="@id/progress" />
 
@@ -262,15 +273,15 @@
         android:layout_width="75dp"
         android:layout_height="24dp"
         android:layout_marginTop="2dp"
-        android:text="无损音质"
-        android:textSize="10sp"
-        android:textColor="#BAB9B4"
-        android:gravity="center"
         android:fontFamily="sans-serif-black"
+        android:gravity="center"
         android:shadowColor="#CC000000"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="1"
+        android:text="无损音质"
+        android:textColor="#BAB9B4"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="@id/progress"
         app:layout_constraintStart_toStartOf="@id/progress"
         app:layout_constraintTop_toBottomOf="@id/progress" />
@@ -289,59 +300,59 @@
             android:layout_width="39dp"
             android:layout_height="39dp"
             android:layout_marginStart="13dp"
-            android:src="@drawable/list_loop"
-            app:tint="#BAB9B4"
             android:padding="8sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/list_loop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/previous_song"
             android:layout_width="39dp"
             android:layout_height="39dp"
             android:layout_marginStart="21dp"
-            android:src="@drawable/previous_song"
-            app:tint="#BAB9B4"
             android:padding="6sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/previous_song"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/player_mode"/>
+            app:layout_constraintStart_toEndOf="@id/player_mode"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/play_or_pause"
             android:layout_width="53dp"
             android:layout_height="53dp"
             android:src="@drawable/recommend_play"
-            app:tint="#BAB9B4"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/next_song"
             android:layout_width="39dp"
             android:layout_height="39dp"
             android:layout_marginEnd="21dp"
-            android:src="@drawable/next_song"
-            app:tint="#BAB9B4"
             android:padding="6sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/next_song"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/playing"/>
+            app:layout_constraintEnd_toStartOf="@id/playing"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/playing"
             android:layout_width="39dp"
             android:layout_height="39dp"
             android:layout_marginEnd="21dp"
-            android:src="@drawable/player_window_playlist"
-            app:tint="#BAB9B4"
             android:padding="6sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/player_window_playlist"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -358,48 +369,48 @@
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/device"
-            app:tint="#BAB9B4"
             android:padding="8sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/device"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/resemblance"
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:layout_marginStart="52dp"
-            android:src="@drawable/side_navigation_creator"
-            app:tint="#BAB9B4"
             android:padding="8sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/side_navigation_creator"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/device"/>
+            app:layout_constraintStart_toEndOf="@id/device"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/related"
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:layout_marginEnd="52dp"
-            android:src="@drawable/related"
-            app:tint="#BAB9B4"
             android:padding="8sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/related"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/more"/>
+            app:layout_constraintEnd_toStartOf="@id/more"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
 
         <ImageView
             android:id="@+id/more"
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/more"
-            app:tint="#BAB9B4"
             android:padding="8sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/more"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BAB9B4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
