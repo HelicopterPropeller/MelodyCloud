@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -99,8 +100,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
                     runOnUiThread(() -> {
-                        if (isPlaying) rotationAnimator.resume();
-                        else rotationAnimator.pause();
+                        if (isPlaying) {
+                            rotationAnimator.resume();
+                            playOrPause.setImageResource(R.drawable.player_window_pause);
+                        } else {
+                            rotationAnimator.pause();
+                            playOrPause.setImageResource(R.drawable.player_window_play);
+                        }
                     });
                 }
 
@@ -316,7 +322,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
 
         playerWindow = findViewById(R.id.player_window);
         playerWindow.setOnClickListener(v -> {
-            PlayerFragment fragment = PlayerFragment.newInstance("", "");
+            PlayerFragment fragment = PlayerFragment.newInstanceWithCurrentSong(
+                    idSongMap.get(Long.parseLong(playerService.getPlayer().getCurrentMediaItem().mediaId)));
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment)
                     .addToBackStack(null).commit();
         });
@@ -532,19 +539,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                     // 动态添加歌曲信息到 ViewFlipper
                     if (local != null && local.getList() != null) {
                         for (Song song : local.getList()) {
-                            TextView textView = new TextView(this);
-                            textView.setLayoutParams(new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.MATCH_PARENT
-                            ));
-                            textView.setGravity(Gravity.CENTER_VERTICAL);
-                            textView.setText(song.getTitle() + " - " + song.getAuthor().getUsername());
-                            textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-                            textView.setMarqueeRepeatLimit(-1);
-                            textView.setSingleLine(true);
-                            textView.setFocusable(true);
-                            textView.setFocusableInTouchMode(true);
-                            textView.setSelected(true);
+                            TextView textView = buildMarqueeView(song);
                             songViewFlipper.addView(textView);
                         }
                     }
@@ -556,6 +551,24 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
             });
             return null;
         });
+    }
+
+    @NonNull
+    private TextView buildMarqueeView(Song song) {
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+        textView.setText(song.getTitle() + " - " + song.getAuthor().getUsername());
+        textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        textView.setMarqueeRepeatLimit(-1);
+        textView.setSingleLine(true);
+        textView.setFocusable(true);
+        textView.setFocusableInTouchMode(true);
+        textView.setSelected(true);
+        return textView;
     }
 
     /**
@@ -598,7 +611,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         return playerService;
     }
 
-    public Map getIdSongMap() {
+    public Map<Long, Song> getIdSongMap() {
         return idSongMap;
     }
 }

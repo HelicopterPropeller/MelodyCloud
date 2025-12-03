@@ -220,6 +220,13 @@ public class PlayerForegroundService extends Service {
                 for (PlayerCallback cb : callbacks) {
                     cb.onMediaItemRemoved(index);
                 }
+            } else if (action != null && "request play".equals(action)) {
+                int index = intent.getIntExtra("play_index", -1);
+                if (player != null && index >= 0 && index < player.getMediaItemCount()) {
+                    player.seekTo(index, 0);
+                    player.play();
+                }
+
             }
         }
         return START_NOT_STICKY;

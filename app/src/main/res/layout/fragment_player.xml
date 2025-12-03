@@ -144,6 +144,7 @@
         android:src="@drawable/recommend_expand"
         app:layout_constraintStart_toEndOf="@id/song_author"
         app:layout_constraintTop_toTopOf="@id/song_author"
+        android:layout_marginTop="1dp"
         app:tint="@color/content" />
 
 <!--    <TextView-->

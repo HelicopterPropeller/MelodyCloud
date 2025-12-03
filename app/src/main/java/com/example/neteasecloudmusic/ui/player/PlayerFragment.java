@@ -72,6 +72,14 @@ public class PlayerFragment extends Fragment {
         return fragment;
     }
 
+    private Song song;
+
+    public static PlayerFragment newInstanceWithCurrentSong(Song song) {
+        PlayerFragment fragment = new PlayerFragment();
+        fragment.song = song;
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +110,8 @@ public class PlayerFragment extends Fragment {
     private PlayerForegroundService playerService;
     private Map<Long, Song> idSongMap;
     private boolean serviceBound = false;
+
+    private PlayerForegroundService.PlayerCallback playerCallback;
 
     ViewGroup main;
     TextView heart_num;
@@ -157,6 +167,33 @@ public class PlayerFragment extends Fragment {
     }
 
     private void attachTransaction() {
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(cover, "rotation", 0f, 360f);
+        animator.setDuration(20000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.start();
+        animator.pause();
+
+        if (song != null) {
+            name.setText(song.getTitle());
+            author.setText(song.getAuthor().getUsername());
+            now.setText(Utils.formatTime(playerService.getPlayer().getCurrentPosition()));
+            total.setText(Utils.formatTime(song.getDuration()));
+            if (song.getCover() != null) {
+                Glide.with(requireContext())
+                        .load(song.getCover())
+                        .circleCrop()
+                        .into(cover);
+            }
+            if (playerService.getPlayer().isPlaying()) {
+                isPlay.setImageResource(R.drawable.player_window_pause);
+            } else {
+                isPlay.setImageResource(R.drawable.recommend_play);
+            }
+            animator.start();
+        }
+
         name.post(() -> name.setSelected(true)); /* 歌曲名的走马灯焦点 */
 
         isPlay.setOnClickListener(v -> {
@@ -174,14 +211,7 @@ public class PlayerFragment extends Fragment {
         previous.setOnClickListener(v -> playerService.skipToPrevious());
         next.setOnClickListener(v -> playerService.skipToNext());
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(cover, "rotation", 0f, 360f);
-        animator.setDuration(20000);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.start();
-        animator.pause();
-
-        playerService.registerCallback(new PlayerForegroundService.PlayerCallback() {
+        playerCallback  = new PlayerForegroundService.PlayerCallback() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 if (isPlaying) {
@@ -213,12 +243,20 @@ public class PlayerFragment extends Fragment {
 
             @Override
             public void onProgress(long pos, long dur) {
-
+                now.setText(Utils.formatTime(pos));
             }
 
             @Override
             public void onMediaItemRemoved(int index) {
             }
-        });
+        };
+
+        playerService.registerCallback(playerCallback);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        playerService.unregisterCallback(playerCallback);
     }
 }

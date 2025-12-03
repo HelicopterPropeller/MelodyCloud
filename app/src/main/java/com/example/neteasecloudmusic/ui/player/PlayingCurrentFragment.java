@@ -144,6 +144,16 @@ public class PlayingCurrentFragment extends Fragment {
                     }
                 }
             });
+
+            holder.itemView.setOnClickListener(v -> {
+                int pos = holder.getBindingAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
+
+                Intent intent = new Intent(holder.itemView.getContext(), PlayerForegroundService.class);
+                intent.setAction("request play");
+                intent.putExtra("play_index", pos);
+                holder.itemView.getContext().startService(intent);
+            });
         }
 
         @Override
