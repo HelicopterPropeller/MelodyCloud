@@ -59,37 +59,24 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/record"
-        android:layout_width="267dp"
-        android:layout_height="267dp"
-        android:layout_gravity="center_horizontal"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="316dp"
         android:layout_marginTop="-60dp"
-        android:src="@drawable/disk"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stylus" />
-
-    <ImageView
-        android:id="@+id/cover"
-        android:layout_width="168dp"
-        android:layout_height="168dp"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:src="@drawable/groupies"
-        app:layout_constraintBottom_toBottomOf="@id/record"
-        app:layout_constraintEnd_toEndOf="@id/record"
-        app:layout_constraintStart_toStartOf="@id/record"
-        app:layout_constraintTop_toTopOf="@id/record" />
+        app:layout_constraintTop_toBottomOf="@id/stylus"
+        />
 
     <ImageView
         android:id="@+id/stylus"
-        android:layout_width="152dp"
+        android:layout_width="125dp"
         android:layout_height="136dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="3dp"
         android:src="@drawable/stylus"
+        android:scaleType="fitEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar" />
@@ -99,7 +86,6 @@
         android:layout_width="137dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="49dp"
         android:ellipsize="marquee"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -115,7 +101,7 @@
         android:textColor="#C4BEB2"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/record" />
+        app:layout_constraintTop_toBottomOf="@id/view_pager" />
 
     <TextView
         android:id="@+id/song_author"
@@ -162,11 +148,11 @@
         android:id="@+id/heart"
         android:layout_width="26dp"
         android:layout_height="26dp"
-        android:layout_marginTop="59dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="38dp"
         android:src="@drawable/recommend_heart"
         app:layout_constraintEnd_toStartOf="@id/recommend"
-        app:layout_constraintTop_toBottomOf="@id/record"
+        app:layout_constraintTop_toBottomOf="@id/view_pager"
         app:tint="#BAB9B4" />
 
     <TextView

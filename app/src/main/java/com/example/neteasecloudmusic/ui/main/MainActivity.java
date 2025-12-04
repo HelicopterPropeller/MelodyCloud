@@ -22,6 +22,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
@@ -39,6 +41,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import com.example.neteasecloudmusic.R;
 import com.example.neteasecloudmusic.data.model.Playlist;
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
     private ViewFlipper songViewFlipper;
     private ImageView playing;
     private ViewGroup playerWindow;
+    private FragmentContainerView container;
 
     private final Map<Long, Song> idSongMap = new HashMap<>();
 
@@ -188,12 +192,27 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
         }
 
         checkSongsPermission();
+
+        bottomUpAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_up);
     }
 
     public void openDrawer() {
         if (drawerLayout != null && !drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.openDrawer(GravityCompat.START);
         }
+    }
+
+    Animation bottomUpAnimation;
+
+    public void animateBottomUp() {
+        container.setVisibility(View.GONE);
+        bottomNavigation.startAnimation(bottomUpAnimation);
+        playerWindow.startAnimation(bottomUpAnimation);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     /**
@@ -272,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
 
         cover = findViewById(R.id.player_window_cover);
 
-        // 播放窗口歌曲封面旋转动画
+        /* 播放窗口歌曲封面旋转动画 */
         rotationAnimator = ObjectAnimator.ofFloat(cover, "rotation", 0f, 360f);
         rotationAnimator.setDuration(20000);
         rotationAnimator.setInterpolator(new LinearInterpolator());
@@ -302,13 +321,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
                     if (isDragging) {
                         float upX = event.getX();
                         if (downX - upX > 100) {
-                            // 左滑切换下一首歌曲
+                            /* 左滑切换下一首歌曲 */
                             songViewFlipper.setOutAnimation(this, R.anim.slide_out_left);
                             songViewFlipper.setInAnimation(this, R.anim.slide_in_right);
                             songViewFlipper.showNext();
                             playNextSong();
                         } else if (upX - downX > 100) {
-                            // 右滑切换上一首歌曲
+                            /* 右滑切换上一首歌曲 */
                             songViewFlipper.setOutAnimation(this, R.anim.slide_out_right);
                             songViewFlipper.setInAnimation(this, R.anim.slide_in_left);
                             songViewFlipper.showPrevious();
@@ -320,11 +339,26 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnOp
             return false;
         });
 
+        container = findViewById(R.id.container);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+
+            if (fragment == null) {
+                animateBottomUp();
+            }
+        });
+
         playerWindow = findViewById(R.id.player_window);
         playerWindow.setOnClickListener(v -> {
+            container.setVisibility(View.VISIBLE);
             PlayerFragment fragment = PlayerFragment.newInstanceWithCurrentSong(
                     idSongMap.get(Long.parseLong(playerService.getPlayer().getCurrentMediaItem().mediaId)));
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.container, fragment)
                     .addToBackStack(null).commit();
         });
 
